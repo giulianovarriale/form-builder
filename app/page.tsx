@@ -2,9 +2,10 @@
 
 import { Input } from "@/components/ui/input";
 import { Checkbox } from "@/components/ui/checkbox";
-import { Trash2, Type } from "lucide-react";
+import { FileText, Trash2, Type } from "lucide-react";
 import { useRef, useState } from "react";
 import { Button } from "@/components/ui/button";
+import { Textarea } from "@/components/ui/textarea";
 
 export default function Page() {
   const [fields, setFields] = useState<Field[]>([]);
@@ -27,12 +28,45 @@ export default function Page() {
     );
   }
 
+  function addParagraph() {
+    setFields(
+      fields.concat({
+        id: createId("paragraph"),
+        type: "paragraph",
+        isRequired: false,
+        label: "My paragraph field",
+      })
+    );
+  }
+
   function changeFieldLabel(id: string, label: string) {
     setFields(fields.map((f) => (f.id === id ? { ...f, label } : { ...f })));
   }
 
   function removeField(id: string) {
     setFields(fields.filter((f) => f.id !== id));
+  }
+
+  function renderField(field: Field) {
+    const placeholder = `Enter your ${field.label}`;
+
+    switch (field.type) {
+      case "text":
+        return <Input placeholder={placeholder} disabled />;
+      case "paragraph":
+        return (
+          <Textarea
+            placeholder={placeholder}
+            className="min-h-[100px]"
+            disabled
+          />
+        );
+
+      default:
+        throw Error(
+          `Field type ${field.type} is not supported. Please add a new field type.`
+        );
+    }
   }
 
   return (
@@ -49,6 +83,14 @@ export default function Page() {
               <Type className="h-5 w-5" />
               <span className="text-sm font-medium">Text</span>
             </button>
+
+            <button
+              className="border rounded-md p-4 flex flex-col items-center gap-2 hover:bg-gray-50"
+              onClick={addParagraph}
+            >
+              <FileText className="h-5 w-5" />
+              <span className="text-sm font-medium">Paragraph</span>
+            </button>
           </div>
         </div>
       </aside>
@@ -57,6 +99,7 @@ export default function Page() {
         {fields.length === 0 && (
           <div className="p-6 rounded-md border bg-white">
             <p className="text-lg font-semibold mb-4">No fields added yet.</p>
+
             <p className="text-sm text-gray-500">
               Click on the elements on the left to add them to your form.
             </p>
@@ -70,7 +113,7 @@ export default function Page() {
                 className="font-medium w-full"
                 value={field.label}
                 onChange={(e) => changeFieldLabel(field.id, e.target.value)}
-                placeholder="Enter a label for your field"
+                placeholder={`Enter a label for your ${field.type} field`}
               />
 
               <div className="flex items-center gap-2">
@@ -93,9 +136,7 @@ export default function Page() {
               </div>
             </div>
 
-            <div className="p-8">
-              <Input placeholder={`Enter your ${field.label}`} />
-            </div>
+            <div className="p-8">{renderField(field)}</div>
           </div>
         ))}
       </main>
