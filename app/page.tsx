@@ -2,7 +2,7 @@
 
 import { Input } from "@/components/ui/input";
 import { Checkbox } from "@/components/ui/checkbox";
-import { FileText, Trash2, Type } from "lucide-react";
+import { ChevronDown, ChevronUp, FileText, Trash2, Type } from "lucide-react";
 import { useRef, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
@@ -45,6 +45,31 @@ export default function Page() {
 
   function removeField(id: string) {
     setFields(fields.filter((f) => f.id !== id));
+  }
+
+  function moveFieldUp(index: number) {
+    if (index === 0) throw Error(`Cannot move field up for ${index} index`);
+
+    const prevField = fields[index - 1];
+    const currentField = fields[index];
+
+    fields[index - 1] = currentField;
+    fields[index] = prevField;
+
+    setFields([...fields]);
+  }
+
+  function moveFieldDown(index: number) {
+    if (index === fields.length - 1)
+      throw Error(`Cannot move field down for ${index} index`);
+
+    const nextField = fields[index + 1];
+    const currentField = fields[index];
+
+    fields[index + 1] = currentField;
+    fields[index] = nextField;
+
+    setFields([...fields]);
   }
 
   function renderField(field: Field) {
@@ -106,15 +131,37 @@ export default function Page() {
           </div>
         )}
 
-        {fields.map((field) => (
+        {fields.map((field, index) => (
           <div key={field.id} className="border rounded-md bg-white">
             <div className="flex items-center justify-between gap-3 p-6 border-b">
-              <input
-                className="font-medium w-full"
-                value={field.label}
-                onChange={(e) => changeFieldLabel(field.id, e.target.value)}
-                placeholder={`Enter a label for your ${field.type} field`}
-              />
+              <div className="flex gap-4 items-center">
+                <div className="flex flex-col">
+                  <button
+                    onClick={() => moveFieldUp(index)}
+                    disabled={index === 0}
+                    className={index === 0 ? "opacity-30" : undefined}
+                  >
+                    <ChevronUp className="h-6 w-6 text-gray-400 cursor-pointer hover:text-gray-600" />
+                  </button>
+
+                  <button
+                    onClick={() => moveFieldDown(index)}
+                    disabled={index === fields.length - 1}
+                    className={
+                      index === fields.length - 1 ? "opacity-30" : undefined
+                    }
+                  >
+                    <ChevronDown className="h-6 w-6 text-gray-400 cursor-pointer hover:text-gray-600" />
+                  </button>
+                </div>
+
+                <input
+                  className="font-medium w-full"
+                  value={field.label}
+                  onChange={(e) => changeFieldLabel(field.id, e.target.value)}
+                  placeholder={`Enter a label for your ${field.type} field`}
+                />
+              </div>
 
               <div className="flex items-center gap-2">
                 <div className="flex items-center gap-2">
