@@ -2,8 +2,9 @@
 
 import { Input } from "@/components/ui/input";
 import { Checkbox } from "@/components/ui/checkbox";
-import { Type } from "lucide-react";
+import { Trash2, Type } from "lucide-react";
 import { useRef, useState } from "react";
+import { Button } from "@/components/ui/button";
 
 export default function Page() {
   const [fields, setFields] = useState<Field[]>([]);
@@ -30,6 +31,10 @@ export default function Page() {
     setFields(fields.map((f) => (f.id === id ? { ...f, label } : { ...f })));
   }
 
+  function removeField(id: string) {
+    setFields(fields.filter((f) => f.id !== id));
+  }
+
   return (
     <div className="container mx-auto px-4 py-6 grid md:grid-cols-4 gap-6">
       <aside className="md:col-span-1">
@@ -38,7 +43,7 @@ export default function Page() {
 
           <div className="grid grid-cols-2 gap-3">
             <button
-              className="border rounded-md p-4 flex flex-col items-center gap-2 hover:bg-gray-50 cursor-pointer"
+              className="border rounded-md p-4 flex flex-col items-center gap-2 hover:bg-gray-50"
               onClick={addText}
             >
               <Type className="h-5 w-5" />
@@ -76,6 +81,15 @@ export default function Page() {
                     Required
                   </label>
                 </div>
+
+                <Button
+                  variant="ghost"
+                  size="icon"
+                  className="text-gray-500 hover:text-gray-700"
+                  onClick={() => removeField(field.id)}
+                >
+                  <Trash2 className="h-4 w-4" />
+                </Button>
               </div>
             </div>
 
