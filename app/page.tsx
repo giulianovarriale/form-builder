@@ -2,7 +2,14 @@
 
 import { Input } from "@/components/ui/input";
 import { Checkbox } from "@/components/ui/checkbox";
-import { ChevronDown, ChevronUp, FileText, Trash2, Type } from "lucide-react";
+import {
+  CheckSquare,
+  ChevronDown,
+  ChevronUp,
+  FileText,
+  Trash2,
+  Type,
+} from "lucide-react";
 import { useRef, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
@@ -39,12 +46,62 @@ export default function Page() {
     );
   }
 
+  function addCheckbox() {
+    setFields(
+      fields.concat({
+        id: createId("checkbox"),
+        type: "checkbox",
+        isRequired: false,
+        options: [
+          {
+            id: createId("checkbox-option"),
+            label: "option 1",
+          },
+          {
+            id: createId("checkbox-option"),
+            label: "option 2",
+          },
+        ],
+        label: "My checkbox field",
+      })
+    );
+  }
+
   function changeFieldLabel(id: string, label: string) {
     setFields(fields.map((f) => (f.id === id ? { ...f, label } : { ...f })));
   }
 
   function removeField(id: string) {
     setFields(fields.filter((f) => f.id !== id));
+  }
+
+  function removeOption(fieldId: string, optionId: string) {
+    const field = fields.find((f) => f.id === fieldId);
+
+    if (!field) return;
+    if (!("options" in field)) return;
+
+    const options = field.options.filter((o) => o.id !== optionId);
+
+    setFields(
+      fields.map((f) => (f.id === fieldId ? { ...field, options } : { ...f }))
+    );
+  }
+
+  function addOption(fieldId: string) {
+    const field = fields.find((f) => f.id === fieldId);
+
+    if (!field) return;
+    if (!("options" in field)) return;
+
+    const options = field.options.concat({
+      id: createId("checkbox-option"),
+      label: "new option",
+    });
+
+    setFields(
+      fields.map((f) => (f.id === fieldId ? { ...field, options } : { ...f }))
+    );
   }
 
   function moveFieldUp(index: number) {
@@ -72,6 +129,21 @@ export default function Page() {
     setFields([...fields]);
   }
 
+  function changeOptionLabel(fieldId: string, optionId: string, label: string) {
+    const field = fields.find((f) => f.id === fieldId);
+
+    if (!field) return;
+    if (!("options" in field)) return;
+
+    const options = field.options.map((o) =>
+      o.id === optionId ? { ...o, label } : { ...o }
+    );
+
+    setFields(
+      fields.map((f) => (f.id === fieldId ? { ...field, options } : { ...f }))
+    );
+  }
+
   function renderField(field: Field) {
     const placeholder = `Enter your ${field.label}`;
 
@@ -85,6 +157,45 @@ export default function Page() {
             className="min-h-[100px]"
             disabled
           />
+        );
+      case "checkbox":
+        return (
+          <div className="p-4 space-y-3">
+            {field.options.map((option) => (
+              <div
+                key={option.id}
+                className="flex items-center justify-between"
+              >
+                <div className="flex items-center gap-2">
+                  <Checkbox id={option.id} />
+
+                  <Input
+                    value={option.label}
+                    onChange={(e) =>
+                      changeOptionLabel(field.id, option.id, e.target.value)
+                    }
+                  />
+                </div>
+                <Button
+                  variant="ghost"
+                  size="icon"
+                  className="text-gray-400 hover:text-gray-600"
+                  onClick={() => removeOption(field.id, option.id)}
+                >
+                  <Trash2 className="h-4 w-4" />
+                </Button>
+              </div>
+            ))}
+
+            <Button
+              variant="outline"
+              size="sm"
+              className="mt-2"
+              onClick={() => addOption(field.id)}
+            >
+              Add option
+            </Button>
+          </div>
         );
 
       default:
@@ -115,6 +226,14 @@ export default function Page() {
             >
               <FileText className="h-5 w-5" />
               <span className="text-sm font-medium">Paragraph</span>
+            </button>
+
+            <button
+              className="border rounded-md p-4 flex flex-col items-center gap-2 hover:bg-gray-50"
+              onClick={addCheckbox}
+            >
+              <CheckSquare className="h-5 w-5" />
+              <span className="text-sm font-medium">Checkbox</span>
             </button>
           </div>
         </div>
