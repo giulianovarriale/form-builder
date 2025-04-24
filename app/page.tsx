@@ -7,6 +7,7 @@ import {
   ChevronDown,
   ChevronUp,
   FileText,
+  List,
   Trash2,
   Type,
 } from "lucide-react";
@@ -67,6 +68,27 @@ export default function Page() {
     );
   }
 
+  function addSelect() {
+    setFields(
+      fields.concat({
+        id: createId("select"),
+        type: "select",
+        isRequired: false,
+        options: [
+          {
+            id: createId("select-option"),
+            label: "option 1",
+          },
+          {
+            id: createId("select-option"),
+            label: "option 2",
+          },
+        ],
+        label: "My select field",
+      })
+    );
+  }
+
   function changeFieldLabel(id: string, label: string) {
     setFields(fields.map((f) => (f.id === id ? { ...f, label } : { ...f })));
   }
@@ -96,7 +118,7 @@ export default function Page() {
 
     const options = field.options.concat({
       id: createId("checkbox-option"),
-      label: "new option",
+      label: `option ${field.options.length + 1}`,
     });
 
     setFields(
@@ -141,6 +163,21 @@ export default function Page() {
 
     setFields(
       fields.map((f) => (f.id === fieldId ? { ...field, options } : { ...f }))
+    );
+  }
+
+  function updateIsFieldRequired(
+    id: string,
+    isRequired: boolean | "indeterminate"
+  ) {
+    if (isRequired === "indeterminate") return;
+
+    const field = fields.find((f) => f.id === id);
+
+    if (!field) return;
+
+    setFields(
+      fields.map((f) => (f.id === id ? { ...f, isRequired } : { ...f }))
     );
   }
 
@@ -196,10 +233,41 @@ export default function Page() {
             </Button>
           </div>
         );
+      case "select":
+        return (
+          <div className="p-4 space-y-3">
+            {field.options.map((option) => (
+              <div key={option.id} className="flex items-center gap-2">
+                <div className="flex items-center grow gap-2">
+                  <Input
+                    value={option.label}
+                    className="w-full"
+                    onChange={(e) =>
+                      changeOptionLabel(field.id, option.id, e.target.value)
+                    }
+                  />
+                </div>
 
-      default:
-        throw Error(
-          `Field type ${field.type} is not supported. Please add a new field type.`
+                <Button
+                  variant="ghost"
+                  size="icon"
+                  className="text-gray-500 hover:text-gray-700"
+                  onClick={() => removeOption(field.id, option.id)}
+                >
+                  <Trash2 className="h-4 w-4" />
+                </Button>
+              </div>
+            ))}
+
+            <Button
+              variant="outline"
+              size="sm"
+              className="mt-2"
+              onClick={() => addOption(field.id)}
+            >
+              Add option
+            </Button>
+          </div>
         );
     }
   }
@@ -233,6 +301,14 @@ export default function Page() {
             >
               <CheckSquare className="h-5 w-5" />
               <span className="text-sm font-medium">Checkbox</span>
+            </button>
+
+            <button
+              className="border rounded-md p-4 flex flex-col items-center gap-2 hover:bg-gray-50"
+              onClick={addSelect}
+            >
+              <List className="h-5 w-5" />
+              <span className="text-sm font-medium">Select</span>
             </button>
           </div>
         </div>
@@ -283,7 +359,13 @@ export default function Page() {
 
               <div className="flex items-center gap-2">
                 <div className="flex items-center gap-2">
-                  <Checkbox id={`${field.id}_required`} checked={true} />
+                  <Checkbox
+                    id={`${field.id}_required`}
+                    checked={field.isRequired}
+                    onCheckedChange={(checked) =>
+                      updateIsFieldRequired(field.id, checked)
+                    }
+                  />
 
                   <label htmlFor={`${field.id}_required`} className="text-sm">
                     Required
