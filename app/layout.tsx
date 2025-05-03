@@ -10,7 +10,6 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
-import { signOut } from "./actions/sign-out";
 import { createClient } from "@/lib/supabase";
 import { SignOutButton } from "@/components/auth/sign-out-button";
 
