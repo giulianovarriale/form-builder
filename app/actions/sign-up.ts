@@ -1,10 +1,8 @@
 "use server";
 
-import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 
 import { createClient } from "@/lib/supabase";
-import { error } from "console";
 
 export async function signUp(formData: FormData) {
   const supabase = await createClient();
@@ -27,6 +25,5 @@ export async function signUp(formData: FormData) {
     redirect("/error");
   }
 
-  revalidatePath("/", "layout");
-  redirect("/");
+  redirect("/forms");
 }
