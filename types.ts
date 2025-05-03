@@ -1,4 +1,5 @@
 type FormStructure = {
+  id?: string;
   title: string;
   description: string;
   fields: Field[];

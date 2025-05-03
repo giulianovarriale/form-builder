@@ -1,56 +1,23 @@
 import Link from "next/link";
-
 import { Plus, FileText, Calendar } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 
-import {
-  Card,
-  CardContent,
-  CardFooter,
-  CardHeader,
-} from "@/components/ui/card";
+import { Card, CardContent, CardHeader } from "@/components/ui/card";
+import { createClient } from "@/lib/supabase";
+import { redirect } from "next/navigation";
+import { getFormByCreatorId } from "../repositories/form-repository";
 
-// Mock data for forms
-const forms = [
-  {
-    id: "1",
-    title: "Customer Feedback Survey",
-    description: "Collect feedback from customers about our new product",
-    createdAt: new Date(2025, 3, 25), // April 25, 2025
-    responses: 24,
-  },
-  {
-    id: "2",
-    title: "Event Registration",
-    description: "Registration form for the annual conference",
-    createdAt: new Date(2025, 3, 20), // April 20, 2025
-    responses: 156,
-  },
-  {
-    id: "3",
-    title: "Job Application",
-    description: "Application form for software developer position",
-    createdAt: new Date(2025, 3, 15), // April 15, 2025
-    responses: 42,
-  },
-  {
-    id: "4",
-    title: "Newsletter Signup",
-    description: "Form to collect email addresses for newsletter",
-    createdAt: new Date(2025, 3, 10), // April 10, 2025
-    responses: 310,
-  },
-  {
-    id: "5",
-    title: "Contact Information",
-    description: "Basic contact information collection form",
-    createdAt: new Date(2025, 3, 5), // April 5, 2025
-    responses: 18,
-  },
-];
+export default async function Page() {
+  const supabase = await createClient();
+  const { data } = await supabase.auth.getUser();
 
-export default function Page() {
+  if (!data.user) {
+    redirect("/sign-in");
+  }
+
+  const forms = await getFormByCreatorId(data.user.id);
+
   return (
     <div className="container mx-auto px-4 py-12">
       <div className="flex justify-between items-center mb-8">
@@ -88,7 +55,7 @@ export default function Page() {
             <Card key={form.id}>
               <CardHeader>
                 <Link
-                  href={`/forms/${form.id}`}
+                  href={`/forms/${form.id}/edit`}
                   className="font-medium hover:text-purple-700 truncate flex-1"
                 >
                   {form.title}
@@ -100,15 +67,6 @@ export default function Page() {
                   {form.description}
                 </p>
               </CardContent>
-
-              <CardFooter className="flex justify-between items-center text-sm text-gray-500">
-                <div className="flex items-center">
-                  <Calendar className="mr-1 h-3 w-3" />
-                  <span>{form.createdAt.toISOString().split("T")[0]}</span>
-                </div>
-
-                <div>{form.responses} responses</div>
-              </CardFooter>
             </Card>
           ))}
         </div>
