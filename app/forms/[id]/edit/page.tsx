@@ -17,9 +17,9 @@ export default async function Page({ params }: Props) {
 
   return (
     <FormBuilder
-      title="Edit the form"
-      description="Use the button in the side bar to add the fields"
-      action={{ label: "Update Form", handler: updateForm }}
+      title="Edit form"
+      description="Change, remove or add new fields to the form"
+      action={{ label: "Save changes", handler: updateForm }}
       initialValue={{
         id: form.id,
         title: form.title,

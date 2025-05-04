@@ -36,11 +36,11 @@ export default function FormBuilder({
   const idRef = useRef(initialValue?.fields?.length ?? 0);
 
   const [formTitle, setFormTitle] = useState(
-    initialValue?.title ?? "This is the title of my new form"
+    initialValue?.title ?? "Untitled form: click to edit"
   );
 
   const [formDescription, setFormDescription] = useState(
-    initialValue?.description ?? "This is the description of my new form"
+    initialValue?.description ?? "No description yet: click to edit"
   );
 
   const [fields, setFields] = useState<Field[]>(initialValue?.fields ?? []);
@@ -384,7 +384,7 @@ export default function FormBuilder({
             <p className="text-lg font-semibold mb-4">No fields added yet.</p>
 
             <p className="text-sm text-gray-500">
-              Click on the elements on the left to add them to your form.
+              Click on the elements on the left panel to add them to your form.
             </p>
           </div>
         )}
@@ -392,7 +392,7 @@ export default function FormBuilder({
         {fields.map((field, index) => (
           <div key={field.id} className="border rounded-md bg-white">
             <div className="flex items-center justify-between gap-3 p-6 border-b">
-              <div className="flex gap-4 items-center">
+              <div className="flex gap-4 grow items-center">
                 <div className="flex flex-col">
                   <button
                     onClick={() => moveFieldUp(index)}
