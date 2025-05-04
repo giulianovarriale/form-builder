@@ -14,7 +14,6 @@ import {
 import { useRef, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
-import { createForm } from "@/app/actions/create-form";
 
 type Props = {
   id?: string;
@@ -35,6 +34,15 @@ export default function FormBuilder({
   initialValue,
 }: Props) {
   const idRef = useRef(initialValue?.fields?.length ?? 0);
+
+  const [formTitle, setFormTitle] = useState(
+    initialValue?.title ?? "This is the title of my new form"
+  );
+
+  const [formDescription, setFormDescription] = useState(
+    initialValue?.description ?? "This is the description of my new form"
+  );
+
   const [fields, setFields] = useState<Field[]>(initialValue?.fields ?? []);
 
   function createId(prefix: string) {
@@ -289,14 +297,6 @@ export default function FormBuilder({
     }
   }
 
-  function onClickSave() {
-    createForm({
-      title: "My new form",
-      description: "This is my new form",
-      fields,
-    });
-  }
-
   return (
     <div className="container mx-auto px-4 py-12 grid md:grid-cols-4 gap-6">
       <aside className="md:col-span-1">
@@ -351,14 +351,32 @@ export default function FormBuilder({
             onClick={() =>
               action.handler({
                 id: initialValue?.id,
-                title: "My new form",
-                description: "This is my new form",
+                title: formTitle,
+                description: formDescription,
                 fields,
               })
             }
           >
             {action.label}
           </Button>
+        </div>
+
+        <div className="p-6 rounded-md border bg-white flex flex-col gap-4">
+          <input
+            type="text"
+            value={formTitle}
+            className="text-2xl font-bold"
+            placeholder="Click here to edit the title"
+            onChange={(e) => setFormTitle(e.target.value)}
+          />
+
+          <input
+            type="text"
+            value={formDescription}
+            placeholder="Click here to edit the description"
+            className="text-gray-700"
+            onChange={(e) => setFormDescription(e.target.value)}
+          />
         </div>
 
         {fields.length === 0 && (

@@ -10,8 +10,8 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
-import { createClient } from "@/lib/supabase";
 import { SignOutButton } from "@/components/auth/sign-out-button";
+import { getCurrentUser } from "./repositories/current-user-repository";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -33,8 +33,7 @@ export default async function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  const supabase = await createClient();
-  const { data } = await supabase.auth.getUser();
+  const currentUser = await getCurrentUser();
 
   return (
     <html lang="en">
@@ -43,19 +42,22 @@ export default async function RootLayout({
       >
         <header className="border-b bg-white">
           <div className="container mx-auto px-4 py-6 flex items-center justify-between">
-            <div className="flex items-center gap-2">
+            <Link className="flex items-center gap-2" href={"/"}>
               <FileText className="h-6 w-6 text-purple-600" />
               <span className="text-xl font-bold">form.builder</span>
-            </div>
+            </Link>
 
-            {data.user?.email ? (
+            {currentUser?.email ? (
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
                   <Button
                     variant="ghost"
                     className="flex items-center gap-2 hover:bg-gray-100"
                   >
-                    <span className="hidden sm:inline">{data.user.email}</span>
+                    <span className="hidden sm:inline">
+                      {currentUser.email}
+                    </span>
+
                     <ChevronDown className="h-4 w-4 text-gray-500" />
                   </Button>
                 </DropdownMenuTrigger>

@@ -1,22 +1,21 @@
 import Link from "next/link";
-import { Plus, FileText, Calendar } from "lucide-react";
+import { Plus, FileText } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
-import { createClient } from "@/lib/supabase";
 import { redirect } from "next/navigation";
 import { getFormByCreatorId } from "../repositories/form-repository";
+import { getCurrentUser } from "../repositories/current-user-repository";
 
 export default async function Page() {
-  const supabase = await createClient();
-  const { data } = await supabase.auth.getUser();
+  const currentUser = await getCurrentUser();
 
-  if (!data.user) {
+  if (!currentUser) {
     redirect("/sign-in");
   }
 
-  const forms = await getFormByCreatorId(data.user.id);
+  const forms = await getFormByCreatorId(currentUser.id);
 
   return (
     <div className="container mx-auto px-4 py-12">

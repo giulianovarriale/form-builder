@@ -1,20 +1,17 @@
 "use server";
 
 import prisma from "@/lib/prisma";
-import { createClient } from "@/lib/supabase";
 import { redirect } from "next/navigation";
+import { getCurrentUser } from "../repositories/current-user-repository";
 
 export async function updateForm(form: FormStructure) {
-  const supabase = await createClient();
-  const { data } = await supabase.auth.getUser();
-
-  console.log({ id: form.id });
+  const currentUser = await getCurrentUser();
 
   if (!form.id) {
     return;
   }
 
-  if (!data.user) {
+  if (!currentUser) {
     return;
   }
 
@@ -32,7 +29,7 @@ export async function updateForm(form: FormStructure) {
     data: {
       title: form.title,
       description: form.description,
-      creatorId: data.user.id,
+      creatorId: currentUser.id,
       fields: form.fields,
     },
     where: {
