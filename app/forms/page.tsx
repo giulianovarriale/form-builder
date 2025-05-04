@@ -3,7 +3,12 @@ import { Plus, FileText } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 
-import { Card, CardContent, CardHeader } from "@/components/ui/card";
+import {
+  Card,
+  CardContent,
+  CardFooter,
+  CardHeader,
+} from "@/components/ui/card";
 import { redirect } from "next/navigation";
 import { getFormByCreatorId } from "../repositories/form-repository";
 import { getCurrentUser } from "../repositories/current-user-repository";
@@ -66,6 +71,22 @@ export default async function Page() {
                   {form.description}
                 </p>
               </CardContent>
+
+              <CardFooter className="flex gap-4 justify-end">
+                <Link
+                  href={`/forms/${form.id}`}
+                  className="text-purple-600 hover:text-purple-700"
+                >
+                  View
+                </Link>
+
+                <Link
+                  href={`/forms/${form.id}/edit`}
+                  className="text-purple-600 hover:text-purple-700"
+                >
+                  Edit
+                </Link>
+              </CardFooter>
             </Card>
           ))}
         </div>
