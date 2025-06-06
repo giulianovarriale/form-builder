@@ -86,6 +86,13 @@ export default async function Page() {
                 >
                   Edit
                 </Link>
+
+                <Link
+                  href={`/forms/${form.id}/responses`}
+                  className="text-purple-600 hover:text-purple-700"
+                >
+                  Responses
+                </Link>
               </CardFooter>
             </Card>
           ))}

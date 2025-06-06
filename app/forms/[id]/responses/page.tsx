@@ -1,5 +1,8 @@
+import { getCurrentUser } from '@/app/repositories/current-user-repository';
 import { getFormWithResponses } from '@/app/repositories/form-repository';
 import { Card, CardContent } from '@/components/ui/card';
+import { SearchX } from 'lucide-react';
+import { redirect } from 'next/navigation';
 
 type ResponseField = {
   id: string;
@@ -12,12 +15,32 @@ export default async function Page({
 }: {
   params: Promise<{ id: string }>;
 }) {
+  const currentUser = await getCurrentUser();
+
   const { id } = await params;
 
-  const data = await getFormWithResponses(id);
+  if (!currentUser) {
+    redirect('/sign-in');
+  }
+
+  const data = await getFormWithResponses({
+    creatorId: currentUser.id,
+    formId: id,
+  });
 
   if (!data) {
-    return <div className="container mx-auto px-4 py-8">Form not found</div>;
+    return (
+      <div className="flex flex-col items-center py-12">
+        <SearchX className="h-12 w-12 text-gray-400 mb-4" />
+
+        <h2 className="text-xl font-medium mb-1">Page not found!</h2>
+
+        <p className="text-gray-500 mb-6">
+          It seems like the page you are looking for does not exist or has been
+          deleted.
+        </p>
+      </div>
+    );
   }
 
   return (

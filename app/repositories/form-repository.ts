@@ -16,10 +16,17 @@ export async function getFormById(formId: string) {
   });
 }
 
-export async function getFormWithResponses(formId: string) {
+export async function getFormWithResponses({
+  formId,
+  creatorId,
+}: {
+  formId: string;
+  creatorId: string;
+}) {
   return prisma.form.findUnique({
     where: {
       id: formId,
+      creatorId,
     },
     include: {
       responses: true,
