@@ -1,11 +1,11 @@
-type FormStructure = {
+export type FormStructure = {
   id?: string;
   title: string;
   description: string;
   fields: Field[];
 };
 
-type Field =
+export type Field =
   | {
       id: string;
       type: "text";

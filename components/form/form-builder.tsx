@@ -14,6 +14,7 @@ import {
 import { useRef, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
+import { Field, FormStructure } from "@/types";
 
 type Props = {
   id?: string;

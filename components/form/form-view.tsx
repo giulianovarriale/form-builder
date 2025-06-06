@@ -16,6 +16,8 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { submitForm } from "@/app/actions/submit-form";
+import { Field } from "@/types";
 
 type Props = {
   id: string;
@@ -24,11 +26,11 @@ type Props = {
   fields: Field[];
 };
 
-export default function FormView({ title, description, fields }: Props) {
+export default function FormView({ id, title, description, fields }: Props) {
   const [errors, setErrors] = useState<{ [key: string]: string }>({});
   const [isSubmitted, setIsSubmitted] = useState(false);
 
-  function onSubmit(event: FormEvent<HTMLFormElement>) {
+  async function onSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
 
     const formData = new FormData(event.currentTarget);
@@ -51,6 +53,18 @@ export default function FormView({ title, description, fields }: Props) {
       return;
     }
 
+    await submitForm({
+      formId: id,
+      fields: fields.map((field) => {
+        const value = formData.getAll(field.id);
+
+        return {
+          id: field.id,
+          value: value.join(", "),
+        };
+      }),
+    });
+
     setErrors({});
     setIsSubmitted(true);
   }
@@ -67,7 +81,7 @@ export default function FormView({ title, description, fields }: Props) {
         </h2>
 
         <p className="text-gray-600">
-          Thank you for your submission. We've received your response.
+          Thank you for your submission. We have received your response.
         </p>
       </div>
     );
@@ -124,7 +138,11 @@ export default function FormView({ title, description, fields }: Props) {
               <div className="space-y-2">
                 {field.options?.map((option) => (
                   <div key={option.id} className="flex items-center gap-2">
-                    <Checkbox name={field.id} id={option.id} />
+                    <Checkbox
+                      name={field.id}
+                      id={option.id}
+                      value={option.id}
+                    />
                     <label htmlFor={option.id}>{option.label}</label>
                   </div>
                 ))}

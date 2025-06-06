@@ -1,6 +1,7 @@
 import { updateForm } from "@/app/actions/update-form";
 import { getFormById } from "@/app/repositories/form-repository";
 import FormBuilder from "@/components/form/form-builder";
+import { Field } from "@/types";
 
 type Props = {
   params: Promise<{ id: string }>;

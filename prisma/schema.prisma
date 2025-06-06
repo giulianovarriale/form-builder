@@ -10,15 +10,24 @@ generator client {
 }
 
 datasource db {
-  provider = "postgresql"
-  url      = env("DATABASE_URL")
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
   directUrl = env("DIRECT_URL")
 }
 
 model Form {
-  id            String     @id @default(uuid())
-  title         String
-  description   String
-  creatorId     String // relates to user id from supabase auth
-  fields        Json
+  id          String         @id @default(uuid())
+  title       String
+  description String
+  creatorId   String // relates to user id from supabase auth
+  fields      Json
+  responses   FormResponse[]
+}
+
+model FormResponse {
+  id        String   @id @default(uuid())
+  formId    String
+  form      Form     @relation(fields: [formId], references: [id])
+  response  Json
+  createdAt DateTime @default(now())
 }
