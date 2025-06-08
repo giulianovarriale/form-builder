@@ -36,7 +36,7 @@ export default function FormView({ id, title, description, fields }: Props) {
     const formData = new FormData(event.currentTarget);
 
     const invalidFields = fields.filter(
-      (field) => field.isRequired && formData.getAll(field.id).length === 0
+      (field) => field.isRequired && formData.getAll(field.id).length === 0,
     );
 
     if (invalidFields.length > 0) {
@@ -45,7 +45,7 @@ export default function FormView({ id, title, description, fields }: Props) {
           ...acc,
           [field.id]: "Field is required",
         }),
-        {}
+        {},
       );
 
       setErrors(errors);

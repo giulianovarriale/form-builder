@@ -37,11 +37,11 @@ export default function FormBuilder({
   const idRef = useRef(initialValue?.fields?.length ?? 0);
 
   const [formTitle, setFormTitle] = useState(
-    initialValue?.title ?? "Untitled form: click to edit"
+    initialValue?.title ?? "Untitled form: click to edit",
   );
 
   const [formDescription, setFormDescription] = useState(
-    initialValue?.description ?? "No description yet: click to edit"
+    initialValue?.description ?? "No description yet: click to edit",
   );
 
   const [fields, setFields] = useState<Field[]>(initialValue?.fields ?? []);
@@ -58,7 +58,7 @@ export default function FormBuilder({
         type: "text",
         isRequired: false,
         label: "My text field",
-      })
+      }),
     );
   }
 
@@ -69,7 +69,7 @@ export default function FormBuilder({
         type: "paragraph",
         isRequired: false,
         label: "My paragraph field",
-      })
+      }),
     );
   }
 
@@ -90,7 +90,7 @@ export default function FormBuilder({
           },
         ],
         label: "My checkbox field",
-      })
+      }),
     );
   }
 
@@ -111,7 +111,7 @@ export default function FormBuilder({
           },
         ],
         label: "My select field",
-      })
+      }),
     );
   }
 
@@ -132,7 +132,7 @@ export default function FormBuilder({
     const options = field.options.filter((o) => o.id !== optionId);
 
     setFields(
-      fields.map((f) => (f.id === fieldId ? { ...field, options } : { ...f }))
+      fields.map((f) => (f.id === fieldId ? { ...field, options } : { ...f })),
     );
   }
 
@@ -148,7 +148,7 @@ export default function FormBuilder({
     });
 
     setFields(
-      fields.map((f) => (f.id === fieldId ? { ...field, options } : { ...f }))
+      fields.map((f) => (f.id === fieldId ? { ...field, options } : { ...f })),
     );
   }
 
@@ -184,17 +184,17 @@ export default function FormBuilder({
     if (!("options" in field)) return;
 
     const options = field.options.map((o) =>
-      o.id === optionId ? { ...o, label } : { ...o }
+      o.id === optionId ? { ...o, label } : { ...o },
     );
 
     setFields(
-      fields.map((f) => (f.id === fieldId ? { ...field, options } : { ...f }))
+      fields.map((f) => (f.id === fieldId ? { ...field, options } : { ...f })),
     );
   }
 
   function updateIsFieldRequired(
     id: string,
-    isRequired: boolean | "indeterminate"
+    isRequired: boolean | "indeterminate",
   ) {
     if (isRequired === "indeterminate") return;
 
@@ -203,7 +203,7 @@ export default function FormBuilder({
     if (!field) return;
 
     setFields(
-      fields.map((f) => (f.id === id ? { ...f, isRequired } : { ...f }))
+      fields.map((f) => (f.id === id ? { ...f, isRequired } : { ...f })),
     );
   }
 

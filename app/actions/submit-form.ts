@@ -1,7 +1,7 @@
-'use server';
+"use server";
 
-import prisma from '@/lib/prisma';
-import { Field } from '@/types';
+import prisma from "@/lib/prisma";
+import { Field } from "@/types";
 
 type FormResponse = {
   formId: string;
@@ -21,38 +21,38 @@ export async function submitForm({ formId, fields }: FormResponse) {
 
   const data = (form.fields as Field[]).map((field) => {
     const response = fields.find(
-      (fieldResponse) => fieldResponse.id === field.id
+      (fieldResponse) => fieldResponse.id === field.id,
     );
 
     if (!response?.value) {
       return {
         id: field.id,
         label: field.label,
-        value: '',
+        value: "",
       };
     }
 
-    if (field.type === 'checkbox') {
+    if (field.type === "checkbox") {
       return {
         id: field.id,
         label: field.label,
         value: response.value
-          .split(', ')
+          .split(", ")
           .map(
             (id) =>
-              field.options.find((option) => option.id === id)?.label ?? ''
+              field.options.find((option) => option.id === id)?.label ?? "",
           )
-          .join(', '),
+          .join(", "),
       };
     }
 
-    if (field.type === 'select') {
+    if (field.type === "select") {
       return {
         id: field.id,
         label: field.label,
         value:
           field.options.find((option) => option.id === response.value)?.label ??
-          '',
+          "",
       };
     }
 

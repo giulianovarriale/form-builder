@@ -1,8 +1,8 @@
-import { getCurrentUser } from '@/app/repositories/current-user-repository';
-import { getFormWithResponses } from '@/app/repositories/form-repository';
-import { Card, CardContent } from '@/components/ui/card';
-import { SearchX } from 'lucide-react';
-import { redirect } from 'next/navigation';
+import { getCurrentUser } from "@/app/repositories/current-user-repository";
+import { getFormWithResponses } from "@/app/repositories/form-repository";
+import { Card, CardContent } from "@/components/ui/card";
+import { SearchX } from "lucide-react";
+import { redirect } from "next/navigation";
 
 type ResponseField = {
   id: string;
@@ -20,7 +20,7 @@ export default async function Page({
   const { id } = await params;
 
   if (!currentUser) {
-    redirect('/sign-in');
+    redirect("/sign-in");
   }
 
   const data = await getFormWithResponses({
@@ -49,8 +49,8 @@ export default async function Page({
         <h1 className="text-2xl font-bold">{data.title} - Responses</h1>
 
         <p className="text-gray-500">
-          {data.responses.length}{' '}
-          {data.responses.length === 1 ? 'response' : 'responses'} received
+          {data.responses.length}{" "}
+          {data.responses.length === 1 ? "response" : "responses"} received
         </p>
       </div>
 
