@@ -2,7 +2,7 @@ import { getCurrentUser } from "@/app/repositories/current-user-repository";
 import { type NextRequest, NextResponse } from "next/server";
 
 export async function updateSession(request: NextRequest) {
-  NextResponse.next({
+  const supabaseResponse = NextResponse.next({
     request,
   });
 
