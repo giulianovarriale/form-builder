@@ -120,7 +120,7 @@ export default function FormView({ id, title, description, fields }: Props) {
 
             {field.type === "select" && (
               <Select name={field.id} required={field.isRequired}>
-                <SelectTrigger>
+                <SelectTrigger className="w-full">
                   <SelectValue placeholder="Select an option" />
                 </SelectTrigger>
 
