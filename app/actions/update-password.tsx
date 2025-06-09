@@ -9,8 +9,6 @@ export async function updatePassword(formData: FormData): Promise<void> {
   const password = formData.get("new-password") as string;
   const code = formData.get("code") as string;
 
-  console.log({ password, code });
-
   if (!password) {
     return;
   }
