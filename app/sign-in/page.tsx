@@ -75,6 +75,13 @@ export default function SignInPage() {
                   )}
                 </button>
               </div>
+
+              <Link
+                href="/forgot-password"
+                className="text-sm text-purple-600 hover:text-purple-700 font-medium"
+              >
+                Forgot password?
+              </Link>
             </div>
 
             <Button
