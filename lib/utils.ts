@@ -7,7 +7,7 @@ export function cn(...inputs: ClassValue[]) {
 
 const BASE_URL =
   process.env.NODE_ENV === "production"
-    ? `https://${process.env.NEXT_PUBLIC_VERCEL_URL}`
+    ? `https://${process.env.BASE_URL}`
     : "http://localhost:3000";
 
 export function toAbsoluteUrl(path: string): string {
