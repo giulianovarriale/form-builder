@@ -13,6 +13,8 @@ export async function sendResetPasswordLink(formData: FormData) {
     return;
   }
 
+  console.log({ redirectUrl: toAbsoluteUrl("/update-password") });
+
   const { error } = await supabase.auth.resetPasswordForEmail(email, {
     redirectTo: toAbsoluteUrl("/update-password"),
   });
