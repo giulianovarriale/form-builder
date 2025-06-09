@@ -23,11 +23,11 @@ export default async function Page({
   return (
     <div className="px-4 py-12">
       {currentUser?.id === form.creatorId && (
-        <Alert className="max-w-3xl mx-auto mb-6">
+        <Alert className="max-w-2xl mx-auto mb-6">
           <CheckCircle2Icon />
           <AlertTitle>Your form is live!</AlertTitle>
 
-          <AlertDescription>
+          <AlertDescription className="text-gray-700">
             Share the link to start collecting responses.
             <br />
             <span className="underline">{toAbsoluteUrl(`/forms/${id}`)}</span>

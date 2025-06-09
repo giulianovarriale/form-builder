@@ -18,6 +18,7 @@ import {
 } from "@/components/ui/select";
 import { submitForm } from "@/app/actions/submit-form";
 import { Field } from "@/types";
+import { Card } from "../ui/card";
 
 type Props = {
   id: string;
@@ -88,76 +89,83 @@ export default function FormView({ id, title, description, fields }: Props) {
   }
 
   return (
-    <div className="w-full max-w-3xl mx-auto">
-      <div className="bg-white p-6 rounded-md mb-6">
-        <h2 className="text-2xl font-medium mb-2">{title}</h2>
-        <p className="text-gray-600">{description}</p>
-      </div>
+    <div className="w-full max-w-2xl mx-auto">
+      <Card>
+        <div className="bg-white px-6 border-b pb-7">
+          <h2 className="text-2xl font-medium mb-1">{title}</h2>
+          <p className="text-gray-600">{description}</p>
+        </div>
 
-      <form className="space-y-6 p-6 rounded-md bg-white" onSubmit={onSubmit}>
-        {fields.map((field) => (
-          <div key={field.id} className="space-y-2">
-            <label className="block font-medium">
-              {field.label}
-              {field.isRequired && <span className="text-red-500 ml-1">*</span>}
-            </label>
-
-            {errors[field.id] && (
-              <p className="text-red-500 text-md">{errors[field.id]}</p>
-            )}
-
-            {field.type === "text" && (
-              <Input name={field.id} required={field.isRequired} />
-            )}
-
-            {field.type === "paragraph" && (
-              <Textarea
-                name={field.id}
-                required={field.isRequired}
-                className="min-h-[100px]"
-              />
-            )}
-
-            {field.type === "select" && (
-              <Select name={field.id} required={field.isRequired}>
-                <SelectTrigger className="w-full">
-                  <SelectValue placeholder="Select an option" />
-                </SelectTrigger>
-
-                <SelectContent>
-                  {field.options?.map((option) => (
-                    <SelectItem key={option.id} value={option.id}>
-                      {option.label}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-            )}
-
-            {field.type === "checkbox" && (
-              <div className="space-y-2">
-                {field.options?.map((option) => (
-                  <div key={option.id} className="flex items-center gap-2">
-                    <Checkbox
-                      name={field.id}
-                      id={option.id}
-                      value={option.id}
-                    />
-                    <label htmlFor={option.id}>{option.label}</label>
-                  </div>
-                ))}
-              </div>
-            )}
-          </div>
-        ))}
-
-        <Button
-          type="submit"
-          className="w-full bg-purple-600 hover:bg-purple-700"
+        <form
+          className="space-y-6 px-6 rounded-md bg-white"
+          onSubmit={onSubmit}
         >
-          Submit
-        </Button>
-      </form>
+          {fields.map((field) => (
+            <div key={field.id} className="space-y-2">
+              <label className="block font-medium">
+                {field.label}
+                {field.isRequired && (
+                  <span className="text-red-500 ml-1">*</span>
+                )}
+              </label>
+
+              {errors[field.id] && (
+                <p className="text-red-500 text-md">{errors[field.id]}</p>
+              )}
+
+              {field.type === "text" && (
+                <Input name={field.id} required={field.isRequired} />
+              )}
+
+              {field.type === "paragraph" && (
+                <Textarea
+                  name={field.id}
+                  required={field.isRequired}
+                  className="min-h-[100px]"
+                />
+              )}
+
+              {field.type === "select" && (
+                <Select name={field.id} required={field.isRequired}>
+                  <SelectTrigger className="w-full">
+                    <SelectValue placeholder="Select an option" />
+                  </SelectTrigger>
+
+                  <SelectContent>
+                    {field.options?.map((option) => (
+                      <SelectItem key={option.id} value={option.id}>
+                        {option.label}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              )}
+
+              {field.type === "checkbox" && (
+                <div className="space-y-2">
+                  {field.options?.map((option) => (
+                    <div key={option.id} className="flex items-center gap-2">
+                      <Checkbox
+                        name={field.id}
+                        id={option.id}
+                        value={option.id}
+                      />
+                      <label htmlFor={option.id}>{option.label}</label>
+                    </div>
+                  ))}
+                </div>
+              )}
+            </div>
+          ))}
+
+          <Button
+            type="submit"
+            className="w-full bg-purple-600 hover:bg-purple-700"
+          >
+            Submit
+          </Button>
+        </form>
+      </Card>
     </div>
   );
 }

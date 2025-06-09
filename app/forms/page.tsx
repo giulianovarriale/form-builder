@@ -3,12 +3,10 @@ import { Plus, FileText } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 
-import {
-  Card,
-  CardContent,
-  CardFooter,
-  CardHeader,
-} from "@/components/ui/card";
+import { Card, CardContent, CardFooter } from "@/components/ui/card";
+
+import { Separator } from "@/components/ui/separator";
+
 import { redirect } from "next/navigation";
 import { getFormByCreatorId } from "../repositories/form-repository";
 import { getCurrentUser } from "../repositories/current-user-repository";
@@ -32,7 +30,7 @@ export default async function Page() {
 
         <Button className="bg-purple-600 hover:bg-purple-700" asChild>
           <Link href="/forms/new">
-            <Plus className="mr-2 h-4 w-4" /> Create New Form
+            <Plus className="h-4 w-4" /> Create New Form
           </Link>
         </Button>
       </div>
@@ -49,7 +47,7 @@ export default async function Page() {
 
           <Button className="bg-purple-600 hover:bg-purple-700" asChild>
             <Link href="forms/new">
-              <Plus className="mr-2 h-4 w-4" /> Create New Form
+              <Plus className="h-4 w-4" /> Create New Form
             </Link>
           </Button>
         </div>
@@ -57,28 +55,23 @@ export default async function Page() {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {forms.map((form) => (
             <Card key={form.id}>
-              <CardHeader>
-                <Link
-                  href={`/forms/${form.id}/edit`}
-                  className="font-medium hover:text-purple-700 truncate flex-1"
-                >
-                  {form.title}
-                </Link>
-              </CardHeader>
+              <CardContent className="flex flex-col gap-2">
+                <h2 className="font-medium truncate flex-1">{form.title}</h2>
 
-              <CardContent>
-                <p className="text-gray-600 text-sm mb-4 line-clamp-2">
+                <p className="text-gray-600 text-sm line-clamp-2">
                   {form.description}
                 </p>
               </CardContent>
 
-              <CardFooter className="flex gap-4 justify-end">
+              <CardFooter className="flex gap-3 text-sm">
                 <Link
                   href={`/forms/${form.id}`}
                   className="text-purple-600 hover:text-purple-700"
                 >
-                  View
+                  Preview
                 </Link>
+
+                <Separator orientation="vertical" />
 
                 <Link
                   href={`/forms/${form.id}/edit`}
@@ -86,6 +79,8 @@ export default async function Page() {
                 >
                   Edit
                 </Link>
+
+                <Separator orientation="vertical" />
 
                 <Link
                   href={`/forms/${form.id}/responses`}
