@@ -1,14 +1,11 @@
 "use server";
 
 import { createClient } from "@/lib/supabase";
-import { headers } from "next/headers";
+import { toAbsoluteUrl } from "@/lib/utils";
 import { redirect } from "next/navigation";
 
 export async function sendResetPasswordLink(formData: FormData) {
   const supabase = await createClient();
-
-  const headerValues = await headers();
-  const host = headerValues.get("host");
 
   const email = formData.get("email") as string;
 
@@ -16,10 +13,8 @@ export async function sendResetPasswordLink(formData: FormData) {
     return;
   }
 
-  console.log({ host });
-
   const { error } = await supabase.auth.resetPasswordForEmail(email, {
-    redirectTo: "http://localhost:3000/update-password",
+    redirectTo: toAbsoluteUrl("/update-password"),
   });
 
   if (error) {
