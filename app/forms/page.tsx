@@ -10,7 +10,6 @@ import { Separator } from "@/components/ui/separator";
 import { redirect } from "next/navigation";
 import { getFormByCreatorId } from "../repositories/form-repository";
 import { getCurrentUser } from "../repositories/current-user-repository";
-import { Skeleton } from "@/components/ui/skeleton";
 
 export default async function Page() {
   const currentUser = await getCurrentUser();
@@ -20,17 +19,6 @@ export default async function Page() {
   }
 
   const forms = await getFormByCreatorId(currentUser.id);
-
-  // return (
-  //   <div className="container mx-auto px-4 py-12">
-  //     <div className="flex justify-between items-center mb-8">
-  //       <div>
-  //         <Skeleton className="h-8 w-48 mb-2 bg-slate-400" />
-  //         <Skeleton className="h-8 w-48 mb-2 bg-slate-400" />
-  //       </div>
-  //     </div>
-  //   </div>
-  // );
 
   return (
     <div className="container mx-auto px-4 py-12">
