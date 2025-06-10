@@ -8,10 +8,11 @@ import {
   ChevronUp,
   FileText,
   List,
+  Loader2Icon,
   Trash2,
   Type,
 } from "lucide-react";
-import { useRef, useState } from "react";
+import { useRef, useState, useTransition } from "react";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { Field, FormStructure } from "@/types";
@@ -35,6 +36,8 @@ export default function FormBuilder({
   initialValue,
 }: Props) {
   const idRef = useRef(initialValue?.fields?.length ?? 0);
+
+  const [pending, startTransition] = useTransition();
 
   const [formTitle, setFormTitle] = useState(
     initialValue?.title ?? "Untitled form: click to edit",
@@ -349,15 +352,19 @@ export default function FormBuilder({
 
           <Button
             className="bg-purple-600 hover:bg-purple-700"
+            disabled={pending}
             onClick={() =>
-              action.handler({
-                id: initialValue?.id,
-                title: formTitle,
-                description: formDescription,
-                fields,
-              })
+              startTransition(() =>
+                action.handler({
+                  id: initialValue?.id,
+                  title: formTitle,
+                  description: formDescription,
+                  fields,
+                }),
+              )
             }
           >
+            {pending && <Loader2Icon className="animate-spin" />}
             {action.label}
           </Button>
         </div>

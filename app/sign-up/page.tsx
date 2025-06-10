@@ -2,9 +2,9 @@
 
 import { signUp } from "../actions/sign-up";
 
-import { useState } from "react";
+import { useActionState, useState } from "react";
 import Link from "next/link";
-import { Eye, EyeOff } from "lucide-react";
+import { Eye, EyeOff, Loader2Icon } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -17,7 +17,8 @@ import {
 
 import { Input } from "@/components/ui/input";
 
-export default function LoginPage() {
+export default function SignUpPage() {
+  const [, formAction, pending] = useActionState(signUp, undefined);
   const [showPassword, setShowPassword] = useState(false);
 
   return (
@@ -32,7 +33,7 @@ export default function LoginPage() {
         </CardHeader>
 
         <CardContent>
-          <form action={signUp} className="space-y-6">
+          <form action={formAction} className="space-y-6">
             <div className="space-y-2">
               <label htmlFor="email" className="block text-sm font-medium">
                 Email
@@ -112,7 +113,9 @@ export default function LoginPage() {
             <Button
               type="submit"
               className="w-full bg-purple-600 hover:bg-purple-700"
+              disabled={pending}
             >
+              {pending && <Loader2Icon className="animate-spin" />}
               Sign up
             </Button>
           </form>

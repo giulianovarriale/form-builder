@@ -1,9 +1,7 @@
 import { createClient } from "@/lib/supabase";
-import { createServerClient } from "@supabase/ssr";
+import { SupabaseClient } from "@supabase/supabase-js";
 
-export async function getCurrentUser(
-  supabase?: ReturnType<typeof createServerClient>,
-) {
+export async function getCurrentUser(supabase?: SupabaseClient) {
   const supabaseClient = supabase ?? (await createClient());
   const { data } = await supabaseClient.auth.getUser();
 

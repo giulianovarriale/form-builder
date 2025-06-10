@@ -2,9 +2,9 @@
 
 import type React from "react";
 
-import { FormEvent, useState } from "react";
+import { FormEvent, useState, useTransition } from "react";
 
-import { Send } from "lucide-react";
+import { Loader2Icon, Send } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
@@ -28,6 +28,7 @@ type Props = {
 };
 
 export default function FormView({ id, title, description, fields }: Props) {
+  const [pending, startTransition] = useTransition();
   const [errors, setErrors] = useState<{ [key: string]: string }>({});
   const [isSubmitted, setIsSubmitted] = useState(false);
 
@@ -54,20 +55,22 @@ export default function FormView({ id, title, description, fields }: Props) {
       return;
     }
 
-    await submitForm({
-      formId: id,
-      fields: fields.map((field) => {
-        const value = formData.getAll(field.id);
+    startTransition(async () => {
+      await submitForm({
+        formId: id,
+        fields: fields.map((field) => {
+          const value = formData.getAll(field.id);
 
-        return {
-          id: field.id,
-          value: value.join(", "),
-        };
-      }),
+          return {
+            id: field.id,
+            value: value.join(", "),
+          };
+        }),
+      });
+
+      setErrors({});
+      setIsSubmitted(true);
     });
-
-    setErrors({});
-    setIsSubmitted(true);
   }
 
   if (isSubmitted) {
@@ -161,7 +164,9 @@ export default function FormView({ id, title, description, fields }: Props) {
           <Button
             type="submit"
             className="w-full bg-purple-600 hover:bg-purple-700"
+            disabled={pending}
           >
+            {pending && <Loader2Icon className="animate-spin" />}
             Submit
           </Button>
         </form>

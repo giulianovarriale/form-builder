@@ -34,6 +34,7 @@ export default async function RootLayout({
   children: React.ReactNode;
 }>) {
   const currentUser = await getCurrentUser();
+  const homeUrl = currentUser?.email ? "/forms" : "/sign-in";
 
   return (
     <html lang="en">
@@ -42,7 +43,7 @@ export default async function RootLayout({
       >
         <header className="border-b bg-white">
           <div className="container mx-auto px-4 py-6 flex items-center justify-between">
-            <Link className="flex items-center gap-2" href={"/"}>
+            <Link className="flex items-center gap-2" href={homeUrl}>
               <FileText className="h-6 w-6 text-purple-600" />
               <span className="text-xl font-bold">form.builder</span>
             </Link>
