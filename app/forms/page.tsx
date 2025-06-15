@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { Plus, FileText } from "lucide-react";
+import { FileText } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 
