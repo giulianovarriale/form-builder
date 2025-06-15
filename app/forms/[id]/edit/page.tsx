@@ -20,7 +20,7 @@ export default async function Page({ params }: Props) {
     <FormBuilder
       title="Edit form"
       description="Change, remove or add new fields to the form"
-      action={{ label: "Save changes", handler: updateForm }}
+      action={{ label: "Update Form", handler: updateForm }}
       initialValue={{
         id: form.id,
         title: form.title,

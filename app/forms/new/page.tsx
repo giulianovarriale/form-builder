@@ -6,7 +6,7 @@ export default function Page() {
     <FormBuilder
       title="Create a new form"
       description="Use the buttons on the left panel to add fields to your form"
-      action={{ label: "Create form", handler: createForm }}
+      action={{ label: "Create Form", handler: createForm }}
     />
   );
 }

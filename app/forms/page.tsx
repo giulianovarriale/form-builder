@@ -29,9 +29,7 @@ export default async function Page() {
         </div>
 
         <Button className="bg-purple-600 hover:bg-purple-700" asChild>
-          <Link href="/forms/new">
-            <Plus className="h-4 w-4" /> Create New Form
-          </Link>
+          <Link href="/forms/new">New Form</Link>
         </Button>
       </div>
 
@@ -46,9 +44,7 @@ export default async function Page() {
           </p>
 
           <Button className="bg-purple-600 hover:bg-purple-700" asChild>
-            <Link href="forms/new">
-              <Plus className="h-4 w-4" /> Create New Form
-            </Link>
+            <Link href="forms/new">New Form</Link>
           </Button>
         </div>
       ) : (
