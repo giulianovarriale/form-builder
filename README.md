@@ -8,25 +8,41 @@ https://github.com/user-attachments/assets/edaa0e9d-1797-4713-a0d7-b7130a09e7c4
 
 ## TO DO
 * [ ] AI (of course): allow the users to build forms using an internal AI agent
-* [ ] Perceived Performance: make sure we add proper feedback when action are performed (loading and pending states)
+* [x] Perceived Performance: make sure we add proper feedback when action are performed (loading and pending states)
+* [x] Responsiveness: make sure user can use the app on mobile
 * [ ] Real Performance: investigate if it is possible to improve response time 
 * [ ] Accessibility: make sure keyboard users can use the app
 * [ ] Accessibility: make sure screen reader users can use the app
 * [ ] Accessiblity: evaluate color contrast
-* [ ] Responsiveness: make sure user can use the app on mobile
+
 
 ## Getting Started
 
-First, run the development server:
+This app uses Supabase. So in order to run it locally, you will have to:
+* Create a Supabase project
+* Create a .env file and paste some Supabase credentials on it.
 
+```.env
+# Go to your supabase project, then go to "Project Settings" > "Data API"
+SUPABASE_URL=_supabase_project_url_here
+# Go to your project, then go to "Project Settings" > "API Keys"
+SUPABASE_ANON_KEY=supabase_anon_key_here
+
+# Go to your supabase project and click on the button "connect" located in the header of the page > click on the "ORMs" tab > select "Prisma" on tools.
+# Don't forget to replace the [YOUR-PASSWORD] with the real database password from your project.
+DATABASE_URL=supabase_database_url_here
+DIRECT_URL=supabase_direct_url_here
+```
+Once you have the environment variables set, run the commands below:
 ```bash
-npm run dev
-# or
-yarn dev
-# or
+# To install dependencies
+pnpm install
+
+# To apply pending database migrations
+pnpm exec prisma migrate dev
+
+# To start the nextjs application
 pnpm dev
-# or
-bun dev
 ```
 
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
