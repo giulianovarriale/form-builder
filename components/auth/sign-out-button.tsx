@@ -1,14 +1,22 @@
 "use client";
 
 import { signOut } from "@/app/actions/sign-out";
+import { useTransition } from "react";
 
-export function SignOutButton({
-  children,
-  ...rest
-}: React.ComponentProps<"button">) {
+type Props = {
+  loadingState: React.ReactNode;
+} & React.ComponentProps<"button">;
+
+export function SignOutButton({ children, loadingState, ...rest }: Props) {
+  const [pending, startTransition] = useTransition();
+
+  function handleClick() {
+    startTransition(signOut);
+  }
+
   return (
-    <button {...rest} onClick={() => signOut()}>
-      {children}
+    <button {...rest} disabled={pending} onClick={handleClick}>
+      {pending ? loadingState : children}
     </button>
   );
 }

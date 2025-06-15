@@ -65,7 +65,15 @@ export default async function RootLayout({
 
                 <DropdownMenuContent align="end" className="w-56">
                   <DropdownMenuItem className="cursor-pointer" asChild>
-                    <SignOutButton className="w-full">
+                    <SignOutButton
+                      className="w-full"
+                      loadingState={
+                        <div className="animate-pulse flex items-center gap-2">
+                          <LogOut className="mr-2 h-4 w-4" />
+                          <span>Signing out...</span>
+                        </div>
+                      }
+                    >
                       <LogOut className="mr-2 h-4 w-4" />
                       <span>Sign out</span>
                     </SignOutButton>
