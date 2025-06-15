@@ -302,163 +302,166 @@ export default function FormBuilder({
   }
 
   return (
-    <div className="container mx-auto px-4 py-12 grid md:grid-cols-4 gap-6">
-      <aside className="md:col-span-1">
-        <div className="p-6 rounded-md border bg-white">
-          <p className="text-lg font-semibold mb-4">Add Form Elements</p>
-
-          <div className="grid grid-cols-2 gap-3">
-            <button
-              className="border rounded-md p-4 flex flex-col items-center gap-2 hover:bg-gray-50"
-              onClick={addText}
-            >
-              <Type className="h-5 w-5" />
-              <span className="text-sm font-medium">Text</span>
-            </button>
-
-            <button
-              className="border rounded-md p-4 flex flex-col items-center gap-2 hover:bg-gray-50"
-              onClick={addParagraph}
-            >
-              <FileText className="h-5 w-5" />
-              <span className="text-sm font-medium">Paragraph</span>
-            </button>
-
-            <button
-              className="border rounded-md p-4 flex flex-col items-center gap-2 hover:bg-gray-50"
-              onClick={addCheckbox}
-            >
-              <CheckSquare className="h-5 w-5" />
-              <span className="text-sm font-medium">Checkbox</span>
-            </button>
-
-            <button
-              className="border rounded-md p-4 flex flex-col items-center gap-2 hover:bg-gray-50"
-              onClick={addSelect}
-            >
-              <List className="h-5 w-5" />
-              <span className="text-sm font-medium">Select</span>
-            </button>
-          </div>
-        </div>
-      </aside>
-
-      <main className="md:col-span-3 flex flex-col gap-4">
-        <div className="flex justify-between items-center p-6">
-          <div>
-            <h1 className="text-2xl font-bold">{title}</h1>
-            <p className="text-gray-500">{description}</p>
-          </div>
-
-          <Button
-            className="bg-purple-600 hover:bg-purple-700"
-            disabled={pending}
-            onClick={() =>
-              startTransition(() =>
-                action.handler({
-                  id: initialValue?.id,
-                  title: formTitle,
-                  description: formDescription,
-                  fields,
-                }),
-              )
-            }
-          >
-            {pending && <Loader2Icon className="animate-spin" />}
-            {action.label}
-          </Button>
+    <div className="container mx-auto px-4 py-12">
+      <div className="flex flex-col md:flex-row gap-2 md:justify-between md:items-center mb-8">
+        <div>
+          <h1 className="text-2xl font-bold">{title}</h1>
+          <p className="text-gray-500">{description}</p>
         </div>
 
-        <div className="p-6 rounded-md border bg-white flex flex-col gap-4">
-          <input
-            type="text"
-            value={formTitle}
-            className="text-2xl font-bold"
-            placeholder="Click here to edit the title"
-            onChange={(e) => setFormTitle(e.target.value)}
-          />
+        <Button
+          className="bg-purple-600 hover:bg-purple-700"
+          disabled={pending}
+          onClick={() =>
+            startTransition(() =>
+              action.handler({
+                id: initialValue?.id,
+                title: formTitle,
+                description: formDescription,
+                fields,
+              }),
+            )
+          }
+        >
+          {pending && <Loader2Icon className="animate-spin" />}
+          {action.label}
+        </Button>
+      </div>
 
-          <input
-            type="text"
-            value={formDescription}
-            placeholder="Click here to edit the description"
-            className="text-gray-700"
-            onChange={(e) => setFormDescription(e.target.value)}
-          />
-        </div>
-
-        {fields.length === 0 && (
+      <div className="grid md:grid-cols-12 gap-6">
+        <aside className="md:col-span-5 lg:col-span-3">
           <div className="p-6 rounded-md border bg-white">
-            <p className="text-lg font-semibold mb-4">No fields added yet.</p>
+            <p className="text-lg font-semibold mb-4">Add Form Elements</p>
 
-            <p className="text-sm text-gray-500">
-              Click on the elements on the left panel to add them to your form.
-            </p>
-          </div>
-        )}
+            <div className="grid grid-cols-2 gap-3">
+              <button
+                className="border rounded-md p-4 flex flex-col items-center gap-2 hover:bg-gray-50"
+                onClick={addText}
+              >
+                <Type className="h-5 w-5" />
+                <span className="text-sm font-medium">Text</span>
+              </button>
 
-        {fields.map((field, index) => (
-          <div key={field.id} className="border rounded-md bg-white">
-            <div className="flex items-center justify-between gap-3 p-6 border-b">
-              <div className="flex gap-4 grow items-center">
-                <div className="flex flex-col">
-                  <button
-                    onClick={() => moveFieldUp(index)}
-                    disabled={index === 0}
-                    className={index === 0 ? "opacity-30" : undefined}
-                  >
-                    <ChevronUp className="h-6 w-6 text-gray-400 cursor-pointer hover:text-gray-600" />
-                  </button>
+              <button
+                className="border rounded-md p-4 flex flex-col items-center gap-2 hover:bg-gray-50"
+                onClick={addParagraph}
+              >
+                <FileText className="h-5 w-5" />
+                <span className="text-sm font-medium">Paragraph</span>
+              </button>
 
-                  <button
-                    onClick={() => moveFieldDown(index)}
-                    disabled={index === fields.length - 1}
-                    className={
-                      index === fields.length - 1 ? "opacity-30" : undefined
-                    }
-                  >
-                    <ChevronDown className="h-6 w-6 text-gray-400 cursor-pointer hover:text-gray-600" />
-                  </button>
-                </div>
+              <button
+                className="border rounded-md p-4 flex flex-col items-center gap-2 hover:bg-gray-50"
+                onClick={addCheckbox}
+              >
+                <CheckSquare className="h-5 w-5" />
+                <span className="text-sm font-medium">Checkbox</span>
+              </button>
 
-                <input
-                  className="font-medium w-full"
-                  value={field.label}
-                  onChange={(e) => changeFieldLabel(field.id, e.target.value)}
-                  placeholder={`Enter a label for your ${field.type} field`}
-                />
-              </div>
-
-              <div className="flex items-center gap-2">
-                <div className="flex items-center gap-2">
-                  <Checkbox
-                    id={`${field.id}_required`}
-                    checked={field.isRequired}
-                    onCheckedChange={(checked) =>
-                      updateIsFieldRequired(field.id, checked)
-                    }
-                  />
-
-                  <label htmlFor={`${field.id}_required`} className="text-sm">
-                    Required
-                  </label>
-                </div>
-
-                <Button
-                  variant="ghost"
-                  size="icon"
-                  className="text-gray-500 hover:text-gray-700"
-                  onClick={() => removeField(field.id)}
-                >
-                  <Trash2 className="h-4 w-4" />
-                </Button>
-              </div>
+              <button
+                className="border rounded-md p-4 flex flex-col items-center gap-2 hover:bg-gray-50"
+                onClick={addSelect}
+              >
+                <List className="h-5 w-5" />
+                <span className="text-sm font-medium">Select</span>
+              </button>
             </div>
-
-            <div className="p-8">{renderField(field)}</div>
           </div>
-        ))}
-      </main>
+        </aside>
+
+        <main className="md:col-span-7 lg:col-span-9 flex flex-col gap-4">
+          <div className="p-6 rounded-md border bg-white flex flex-col gap-4">
+            <input
+              type="text"
+              value={formTitle}
+              className="text-2xl font-bold"
+              placeholder="Click here to edit the title"
+              onChange={(e) => setFormTitle(e.target.value)}
+            />
+
+            <input
+              type="text"
+              value={formDescription}
+              placeholder="Click here to edit the description"
+              className="text-gray-700"
+              onChange={(e) => setFormDescription(e.target.value)}
+            />
+          </div>
+
+          {fields.length === 0 && (
+            <div className="p-6 rounded-md border bg-white">
+              <p className="text-lg font-semibold mb-4">No fields added yet.</p>
+
+              <p className="text-sm text-gray-500">
+                Click on the elements on the left panel to add them to your
+                form.
+              </p>
+            </div>
+          )}
+
+          {fields.map((field, index) => (
+            <div key={field.id} className="border rounded-md bg-white">
+              <div className="flex items-center justify-between gap-3 p-6 border-b">
+                <div className="flex gap-4 grow items-center">
+                  <div className="flex flex-col">
+                    <button
+                      onClick={() => moveFieldUp(index)}
+                      disabled={index === 0}
+                      className={index === 0 ? "opacity-30" : undefined}
+                    >
+                      <ChevronUp className="h-6 w-6 text-gray-400 cursor-pointer hover:text-gray-600" />
+                    </button>
+
+                    <button
+                      onClick={() => moveFieldDown(index)}
+                      disabled={index === fields.length - 1}
+                      className={
+                        index === fields.length - 1 ? "opacity-30" : undefined
+                      }
+                    >
+                      <ChevronDown className="h-6 w-6 text-gray-400 cursor-pointer hover:text-gray-600" />
+                    </button>
+                  </div>
+
+                  <input
+                    className="font-medium w-full"
+                    value={field.label}
+                    onChange={(e) => changeFieldLabel(field.id, e.target.value)}
+                    placeholder={`Enter a label for your ${field.type} field`}
+                  />
+                </div>
+
+                <div className="flex items-center gap-2">
+                  <div className="flex items-center gap-2">
+                    <Checkbox
+                      id={`${field.id}_required`}
+                      checked={field.isRequired}
+                      onCheckedChange={(checked) =>
+                        updateIsFieldRequired(field.id, checked)
+                      }
+                    />
+
+                    <label htmlFor={`${field.id}_required`} className="text-sm">
+                      Required
+                    </label>
+                  </div>
+
+                  <Button
+                    variant="ghost"
+                    size="icon"
+                    className="text-gray-500 hover:text-gray-700"
+                    onClick={() => removeField(field.id)}
+                  >
+                    <Trash2 className="h-4 w-4" />
+                  </Button>
+                </div>
+              </div>
+
+              <div className="p-8">{renderField(field)}</div>
+            </div>
+          ))}
+        </main>
+      </div>
     </div>
   );
 }
