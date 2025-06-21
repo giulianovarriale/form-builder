@@ -91,6 +91,70 @@ export default function FormView({ id, title, description, fields }: Props) {
     );
   }
 
+  function renderField(field: Field) {
+    if (field.type === "checkbox") {
+      return (
+        <fieldset>
+          <legend className="block font-medium">
+            {field.label}
+            {field.isRequired && <span className="text-red-500 ml-1">*</span>}
+          </legend>
+
+          <div className="space-y-2">
+            {field.options?.map((option) => (
+              <div key={option.id} className="flex items-center gap-2">
+                <Checkbox name={field.id} id={option.id} value={option.id} />
+
+                <label htmlFor={option.id}>{option.label}</label>
+              </div>
+            ))}
+          </div>
+        </fieldset>
+      );
+    }
+    return (
+      <>
+        <label className="block font-medium" htmlFor={field.id}>
+          {field.label}
+          {field.isRequired && <span className="text-red-500 ml-1">*</span>}
+        </label>
+
+        {errors[field.id] && (
+          <p className="text-red-500 text-md">{errors[field.id]}</p>
+        )}
+
+        {field.type === "text" && (
+          <Input id={field.id} name={field.id} required={field.isRequired} />
+        )}
+
+        {field.type === "paragraph" && (
+          <Textarea
+            id={field.id}
+            name={field.id}
+            required={field.isRequired}
+            className="min-h-[100px]"
+          />
+        )}
+
+        {field.type === "select" && (
+          <Select name={field.id} required={field.isRequired}>
+            <SelectTrigger id={field.id} className="w-full">
+              <SelectValue placeholder="Select an option" />
+            </SelectTrigger>
+
+            <SelectContent>
+              {field.options?.map((option) => (
+                <SelectItem key={option.id} value={option.id}>
+                  {option.label}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
+        )}
+      </>
+    );
+  }
+
   return (
     <div className="w-full max-w-2xl mx-auto">
       <Card>
@@ -105,59 +169,7 @@ export default function FormView({ id, title, description, fields }: Props) {
         >
           {fields.map((field) => (
             <div key={field.id} className="space-y-2">
-              <label className="block font-medium">
-                {field.label}
-                {field.isRequired && (
-                  <span className="text-red-500 ml-1">*</span>
-                )}
-              </label>
-
-              {errors[field.id] && (
-                <p className="text-red-500 text-md">{errors[field.id]}</p>
-              )}
-
-              {field.type === "text" && (
-                <Input name={field.id} required={field.isRequired} />
-              )}
-
-              {field.type === "paragraph" && (
-                <Textarea
-                  name={field.id}
-                  required={field.isRequired}
-                  className="min-h-[100px]"
-                />
-              )}
-
-              {field.type === "select" && (
-                <Select name={field.id} required={field.isRequired}>
-                  <SelectTrigger className="w-full">
-                    <SelectValue placeholder="Select an option" />
-                  </SelectTrigger>
-
-                  <SelectContent>
-                    {field.options?.map((option) => (
-                      <SelectItem key={option.id} value={option.id}>
-                        {option.label}
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
-              )}
-
-              {field.type === "checkbox" && (
-                <div className="space-y-2">
-                  {field.options?.map((option) => (
-                    <div key={option.id} className="flex items-center gap-2">
-                      <Checkbox
-                        name={field.id}
-                        id={option.id}
-                        value={option.id}
-                      />
-                      <label htmlFor={option.id}>{option.label}</label>
-                    </div>
-                  ))}
-                </div>
-              )}
+              {renderField(field)}
             </div>
           ))}
 

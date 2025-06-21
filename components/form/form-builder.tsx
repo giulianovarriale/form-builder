@@ -40,11 +40,11 @@ export default function FormBuilder({
   const [pending, startTransition] = useTransition();
 
   const [formTitle, setFormTitle] = useState(
-    initialValue?.title ?? "Untitled form: click to edit",
+    initialValue?.title ?? "Your form title here",
   );
 
   const [formDescription, setFormDescription] = useState(
-    initialValue?.description ?? "No description yet: click to edit",
+    initialValue?.description ?? "Your form description here",
   );
 
   const [fields, setFields] = useState<Field[]>(initialValue?.fields ?? []);
@@ -60,7 +60,7 @@ export default function FormBuilder({
         id: createId("text"),
         type: "text",
         isRequired: false,
-        label: "My text field",
+        label: "Your question here",
       }),
     );
   }
@@ -71,7 +71,7 @@ export default function FormBuilder({
         id: createId("paragraph"),
         type: "paragraph",
         isRequired: false,
-        label: "My paragraph field",
+        label: "Your question here",
       }),
     );
   }
@@ -92,7 +92,7 @@ export default function FormBuilder({
             label: "option 2",
           },
         ],
-        label: "My checkbox field",
+        label: "Your question here",
       }),
     );
   }
@@ -113,7 +113,7 @@ export default function FormBuilder({
             label: "option 2",
           },
         ],
-        label: "My select field",
+        label: "Your question here",
       }),
     );
   }
@@ -211,7 +211,7 @@ export default function FormBuilder({
   }
 
   function renderField(field: Field) {
-    const placeholder = `Enter your ${field.label}`;
+    const placeholder = `This is a preview for the ${field.type} field`;
 
     switch (field.type) {
       case "text":
@@ -226,13 +226,14 @@ export default function FormBuilder({
         );
       case "checkbox":
         return (
-          <div className="p-4 space-y-3">
+          <div className="space-y-3">
             {field.options.map((option) => (
               <div key={option.id} className="flex items-center gap-2">
                 <div className="flex items-center grow gap-2">
-                  <Checkbox id={option.id} />
+                  <div className="border-input size-4 shrink-0 rounded-[4px] border shadow-xs" />
 
                   <Input
+                    aria-label="Option"
                     value={option.label}
                     className="w-full"
                     onChange={(e) =>
@@ -242,6 +243,7 @@ export default function FormBuilder({
                 </div>
 
                 <Button
+                  aria-label={`Remove option "${option.label}"`}
                   variant="ghost"
                   size="icon"
                   className="text-gray-500 hover:text-gray-700"
@@ -264,11 +266,12 @@ export default function FormBuilder({
         );
       case "select":
         return (
-          <div className="p-4 space-y-3">
+          <div className="space-y-3">
             {field.options.map((option) => (
               <div key={option.id} className="flex items-center gap-2">
                 <div className="flex items-center grow gap-2">
                   <Input
+                    aria-label="Option"
                     value={option.label}
                     className="w-full"
                     onChange={(e) =>
@@ -278,6 +281,7 @@ export default function FormBuilder({
                 </div>
 
                 <Button
+                  aria-label={`Remove option "${option.label}"`}
                   variant="ghost"
                   size="icon"
                   className="text-gray-500 hover:text-gray-700"
@@ -336,6 +340,7 @@ export default function FormBuilder({
 
             <div className="grid grid-cols-2 gap-3">
               <button
+                aria-label="Add text field"
                 className="border rounded-md p-4 flex flex-col items-center gap-2 hover:bg-gray-50"
                 onClick={addText}
               >
@@ -344,6 +349,7 @@ export default function FormBuilder({
               </button>
 
               <button
+                aria-label="Add paragraph field"
                 className="border rounded-md p-4 flex flex-col items-center gap-2 hover:bg-gray-50"
                 onClick={addParagraph}
               >
@@ -352,6 +358,7 @@ export default function FormBuilder({
               </button>
 
               <button
+                aria-label="Add checkbox field"
                 className="border rounded-md p-4 flex flex-col items-center gap-2 hover:bg-gray-50"
                 onClick={addCheckbox}
               >
@@ -360,6 +367,7 @@ export default function FormBuilder({
               </button>
 
               <button
+                aria-label="Add select field"
                 className="border rounded-md p-4 flex flex-col items-center gap-2 hover:bg-gray-50"
                 onClick={addSelect}
               >
@@ -373,17 +381,19 @@ export default function FormBuilder({
         <main className="md:col-span-7 lg:col-span-9 flex flex-col gap-4">
           <div className="p-6 rounded-md border bg-white flex flex-col gap-4">
             <input
+              aria-label="Form title"
               type="text"
               value={formTitle}
               className="text-2xl font-bold"
-              placeholder="Click here to edit the title"
+              placeholder="Untitled form"
               onChange={(e) => setFormTitle(e.target.value)}
             />
 
             <input
+              aria-label="Form description"
               type="text"
               value={formDescription}
-              placeholder="Click here to edit the description"
+              placeholder="Description goes here."
               className="text-gray-700"
               onChange={(e) => setFormDescription(e.target.value)}
             />
@@ -406,6 +416,7 @@ export default function FormBuilder({
                 <div className="flex gap-4 grow items-center">
                   <div className="flex flex-col">
                     <button
+                      aria-label={`Move "${field.label}" field up`}
                       onClick={() => moveFieldUp(index)}
                       disabled={index === 0}
                       className={index === 0 ? "opacity-30" : undefined}
@@ -414,6 +425,7 @@ export default function FormBuilder({
                     </button>
 
                     <button
+                      aria-label={`Move "${field.label}" field down`}
                       onClick={() => moveFieldDown(index)}
                       disabled={index === fields.length - 1}
                       className={
@@ -425,6 +437,8 @@ export default function FormBuilder({
                   </div>
 
                   <input
+                    autoFocus
+                    aria-label={`Label for "${field.type}" field`}
                     className="font-medium w-full"
                     value={field.label}
                     onChange={(e) => changeFieldLabel(field.id, e.target.value)}
@@ -442,12 +456,17 @@ export default function FormBuilder({
                       }
                     />
 
-                    <label htmlFor={`${field.id}_required`} className="text-sm">
+                    <label
+                      aria-label={`Is "${field.label} Required?"`}
+                      htmlFor={`${field.id}_required`}
+                      className="text-sm"
+                    >
                       Required
                     </label>
                   </div>
 
                   <Button
+                    aria-label={`Remove "${field.label}" field`}
                     variant="ghost"
                     size="icon"
                     className="text-gray-500 hover:text-gray-700"
