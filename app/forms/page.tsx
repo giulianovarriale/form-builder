@@ -3,13 +3,10 @@ import { FileText } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 
-import { Card, CardContent, CardFooter } from "@/components/ui/card";
-
-import { Separator } from "@/components/ui/separator";
-
 import { redirect } from "next/navigation";
 import { getFormByCreatorId } from "../repositories/form-repository";
 import { getCurrentUser } from "../repositories/current-user-repository";
+import FormCard from "./_components/form-card";
 
 export default async function Page() {
   const currentUser = await getCurrentUser();
@@ -28,8 +25,11 @@ export default async function Page() {
           <p className="text-gray-500">Manage and create your forms</p>
         </div>
 
-        <Button className="bg-purple-600 hover:bg-purple-700" asChild>
-          <Link href="/forms/new">New Form</Link>
+        <Button size="lg" className="bg-purple-600 hover:bg-purple-700" asChild>
+          <Link href="/forms/new">
+            <FileText />
+            New Form
+          </Link>
         </Button>
       </div>
 
@@ -43,49 +43,21 @@ export default async function Page() {
             Create your first form to get started
           </p>
 
-          <Button className="bg-purple-600 hover:bg-purple-700" asChild>
-            <Link href="forms/new">New Form</Link>
+          <Button
+            size="lg"
+            className="bg-purple-600 hover:bg-purple-700"
+            asChild
+          >
+            <Link href="/forms/new">
+              <FileText />
+              New Form
+            </Link>
           </Button>
         </div>
       ) : (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {forms.map((form) => (
-            <Card key={form.id}>
-              <CardContent className="flex flex-col gap-2">
-                <h2 className="font-medium truncate flex-1">{form.title}</h2>
-
-                <p className="text-gray-600 text-sm line-clamp-2">
-                  {form.description}
-                </p>
-              </CardContent>
-
-              <CardFooter className="flex gap-3 text-sm">
-                <Link
-                  href={`/forms/${form.id}`}
-                  className="text-purple-600 hover:text-purple-700"
-                >
-                  Preview
-                </Link>
-
-                <Separator orientation="vertical" />
-
-                <Link
-                  href={`/forms/${form.id}/edit`}
-                  className="text-purple-600 hover:text-purple-700"
-                >
-                  Edit
-                </Link>
-
-                <Separator orientation="vertical" />
-
-                <Link
-                  href={`/forms/${form.id}/responses`}
-                  className="text-purple-600 hover:text-purple-700"
-                >
-                  Responses
-                </Link>
-              </CardFooter>
-            </Card>
+            <FormCard key={form.id} form={form} />
           ))}
         </div>
       )}

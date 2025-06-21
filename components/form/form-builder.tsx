@@ -310,6 +310,7 @@ export default function FormBuilder({
         </div>
 
         <Button
+          size="lg"
           className="bg-purple-600 hover:bg-purple-700"
           disabled={pending}
           onClick={() =>
@@ -323,7 +324,7 @@ export default function FormBuilder({
             )
           }
         >
-          {pending && <Loader2Icon className="animate-spin" />}
+          {pending ? <Loader2Icon className="animate-spin" /> : <FileText />}
           {action.label}
         </Button>
       </div>

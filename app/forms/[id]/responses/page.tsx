@@ -1,7 +1,13 @@
 import { getCurrentUser } from "@/app/repositories/current-user-repository";
 import { getFormWithResponses } from "@/app/repositories/form-repository";
-import { Card, CardContent } from "@/components/ui/card";
-import { SearchX } from "lucide-react";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import { Calendar, SearchX } from "lucide-react";
 import { redirect } from "next/navigation";
 
 type ResponseField = {
@@ -60,24 +66,24 @@ export default async function Page({
             <p className="text-gray-700">No responses yet</p>
           </div>
         ) : (
-          data.responses.map((response) => (
+          data.responses.map((response, index) => (
             <Card key={response.id} className="overflow-hidden">
+              <CardHeader className="pb-3">
+                <CardTitle>Response #{index + 1}</CardTitle>
+
+                <CardDescription className="flex items-center gap-2">
+                  <Calendar className="w-3 h-3" />
+                  Sent on {formatDate(response.createdAt.toISOString())}
+                </CardDescription>
+              </CardHeader>
               <CardContent>
                 <div className="space-y-6">
-                  <div className="space-y-2">
-                    <p className="font-medium text-sm">Submitted on</p>
-
-                    <p className="p-3 bg-gray-50 rounded-md whitespace-pre-wrap">
-                      {response.createdAt.toISOString()}
-                    </p>
-                  </div>
-
                   {(response.response as ResponseField[]).map((field) => (
                     <div key={field.id} className="space-y-2">
                       <p className="font-medium text-sm">{field.label}</p>
 
                       <p className="p-3 bg-gray-50 rounded-md whitespace-pre-wrap">
-                        {field.value}
+                        {renderFieldValue(field.value)}
                       </p>
                     </div>
                   ))}
@@ -89,4 +95,23 @@ export default async function Page({
       </div>
     </div>
   );
+}
+
+function renderFieldValue(value: string | undefined | null) {
+  if (value === null || value === undefined || value === "") {
+    return "No response provided";
+  }
+
+  return value;
+}
+
+function formatDate(dateString: string) {
+  return new Intl.DateTimeFormat("en-US", {
+    day: "2-digit",
+    month: "2-digit",
+    year: "numeric",
+    hour: "2-digit",
+    minute: "2-digit",
+    hour12: false,
+  }).format(new Date(dateString));
 }

@@ -75,7 +75,7 @@ export default function FormView({ id, title, description, fields }: Props) {
 
   if (isSubmitted) {
     return (
-      <div className=" px-4 py-12 flex flex-col items-center">
+      <div className="px-4 py-12 flex flex-col items-center">
         <div className="bg-green-100 rounded-full p-4 mb-6">
           <Send className="h-8 w-8 text-green-600" />
         </div>
@@ -162,11 +162,12 @@ export default function FormView({ id, title, description, fields }: Props) {
           ))}
 
           <Button
+            size="lg"
             type="submit"
             className="w-full bg-purple-600 hover:bg-purple-700"
             disabled={pending}
           >
-            {pending && <Loader2Icon className="animate-spin" />}
+            {pending ? <Loader2Icon className="animate-spin" /> : <Send />}
             Submit
           </Button>
         </form>
