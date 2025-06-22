@@ -7,13 +7,12 @@ https://github.com/user-attachments/assets/edaa0e9d-1797-4713-a0d7-b7130a09e7c4
 **🚧 This project is and will always be a work in progress**
 
 ## TO DO
-* [ ] AI (of course): allow the users to build forms using an internal AI agent
-* [ ] Perceived Performance: make sure we add proper feedback when action are performed (loading and pending states)
-* [ ] Real Performance: investigate if it is possible to improve response time 
-* [ ] Accessibility: make sure keyboard users can use the app
-* [ ] Accessibility: make sure screen reader users can use the app
-* [ ] Accessiblity: evaluate color contrast
+* [x] Perceived Performance: make sure we add proper feedback when action are performed (loading and pending states)
+* [x] Accessibility: make sure keyboard users can use the app
+* [x] Accessibility: make sure screen reader users can use the app
 * [ ] Responsiveness: make sure user can use the app on mobile
+* [ ] Accessiblity: evaluate color contrast
+* [ ] AI (of course): allow the users to build forms using an internal AI agent
 
 ## Getting Started
 
