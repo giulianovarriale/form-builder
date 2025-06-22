@@ -50,7 +50,7 @@ export default async function Page({
               <ShareFormButton url={formUrl} />
             </div>
 
-            <div className="bg-gray-50 rounded-lg p-4 py-3 mb-4">
+            <div className="bg-gray-50 rounded-lg p-4 py-3">
               <span className="text-sm text-gray-600 break-all">{formUrl}</span>
             </div>
           </CardContent>
