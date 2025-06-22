@@ -49,37 +49,49 @@ export default function FormBuilder({
 
   const [fields, setFields] = useState<Field[]>(initialValue?.fields ?? []);
 
+  const lastAddedFieldId = useRef<string>("");
+
   function createId(prefix: string) {
     idRef.current = idRef.current + 1;
     return `${prefix}_${idRef.current}`;
   }
 
   function addText() {
+    const id = createId("text");
+
     setFields(
       fields.concat({
-        id: createId("text"),
+        id,
         type: "text",
         isRequired: false,
         label: "Your question here",
       }),
     );
+
+    lastAddedFieldId.current = id;
   }
 
   function addParagraph() {
+    const id = createId("paragraph");
+
     setFields(
       fields.concat({
-        id: createId("paragraph"),
+        id,
         type: "paragraph",
         isRequired: false,
         label: "Your question here",
       }),
     );
+
+    lastAddedFieldId.current = id;
   }
 
   function addCheckbox() {
+    const id = createId("checkbox");
+
     setFields(
       fields.concat({
-        id: createId("checkbox"),
+        id,
         type: "checkbox",
         isRequired: false,
         options: [
@@ -95,12 +107,16 @@ export default function FormBuilder({
         label: "Your question here",
       }),
     );
+
+    lastAddedFieldId.current = id;
   }
 
   function addSelect() {
+    const id = createId("select");
+
     setFields(
       fields.concat({
-        id: createId("select"),
+        id,
         type: "select",
         isRequired: false,
         options: [
@@ -116,6 +132,8 @@ export default function FormBuilder({
         label: "Your question here",
       }),
     );
+
+    lastAddedFieldId.current = id;
   }
 
   function changeFieldLabel(id: string, label: string) {
@@ -437,7 +455,7 @@ export default function FormBuilder({
                   </div>
 
                   <input
-                    autoFocus
+                    autoFocus={lastAddedFieldId.current === field.id}
                     aria-label={`Label for "${field.type}" field`}
                     className="font-medium w-full"
                     value={field.label}
