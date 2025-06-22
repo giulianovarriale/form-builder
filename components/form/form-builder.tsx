@@ -402,7 +402,7 @@ export default function FormBuilder({
               aria-label="Form title"
               type="text"
               value={formTitle}
-              className="text-2xl font-bold"
+              className="text-2xl font-bold w-full"
               placeholder="Untitled form"
               onChange={(e) => setFormTitle(e.target.value)}
             />
@@ -412,7 +412,7 @@ export default function FormBuilder({
               type="text"
               value={formDescription}
               placeholder="Description goes here."
-              className="text-gray-700"
+              className="text-gray-700 w-full"
               onChange={(e) => setFormDescription(e.target.value)}
             />
           </div>
