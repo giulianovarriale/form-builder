@@ -55,7 +55,7 @@ export default function FormBuilder({
     undefined,
   );
 
-  const [_, startTransition] = useTransition();
+  const [, startTransition] = useTransition();
 
   const lastAddedFieldId = useRef<string>("");
 

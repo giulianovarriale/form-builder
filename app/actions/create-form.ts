@@ -45,7 +45,9 @@ export async function createForm(
   redirect("/forms");
 }
 
-function validateForm(form: FormStructure) {
+function validateForm(
+  form: FormStructure,
+): { valid: false; error: string } | { valid: true } {
   if (form.title.trim() === "") {
     return {
       valid: false,
