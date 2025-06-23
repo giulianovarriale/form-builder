@@ -4,13 +4,18 @@ import { createClient } from "@/lib/supabase";
 import { toAbsoluteUrl } from "@/lib/utils";
 import { redirect } from "next/navigation";
 
-export async function sendResetPasswordLink(formData: FormData) {
+export async function sendResetPasswordLink(
+  _: { error: string } | undefined,
+  formData: FormData,
+) {
   const supabase = await createClient();
 
   const email = formData.get("email") as string;
 
   if (!email) {
-    return;
+    return {
+      error: "Email is required. Please try again.",
+    };
   }
 
   const { error } = await supabase.auth.resetPasswordForEmail(email, {
@@ -18,7 +23,10 @@ export async function sendResetPasswordLink(formData: FormData) {
   });
 
   if (error) {
-    return;
+    return {
+      error:
+        "An error occurred while sending the reset password link. Please try again.",
+    };
   }
 
   redirect("/forgot-password/success");

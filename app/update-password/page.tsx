@@ -10,11 +10,15 @@ import {
 } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { updatePassword } from "../actions/update-password";
-import { useState } from "react";
-import { Eye, EyeOff } from "lucide-react";
+import { useActionState, useState } from "react";
+import { Eye, EyeOff, Loader2Icon } from "lucide-react";
 import { useSearchParams } from "next/navigation";
 
 export default function UpdatePasswordPage() {
+  const [result, formAction, pending] = useActionState(
+    updatePassword,
+    undefined,
+  );
   const [showPassword, setShowPassword] = useState(false);
 
   const code = useSearchParams().get("code") ?? "";
@@ -33,7 +37,11 @@ export default function UpdatePasswordPage() {
         </CardHeader>
 
         <CardContent>
-          <form action={updatePassword} className="space-y-6">
+          <form action={formAction} className="space-y-6">
+            {result?.error && (
+              <p className="text-red-600 text-sm mb-4">{result.error}</p>
+            )}
+
             <input type="hidden" name="code" value={code} />
 
             <div className="space-y-2">
@@ -71,7 +79,9 @@ export default function UpdatePasswordPage() {
             <Button
               type="submit"
               className="w-full bg-purple-600 hover:bg-purple-700"
+              disabled={pending}
             >
+              {pending && <Loader2Icon className="animate-spin" />}
               Update password
             </Button>
           </form>

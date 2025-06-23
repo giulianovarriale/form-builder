@@ -4,11 +4,12 @@ import { redirect } from "next/navigation";
 
 import { createClient } from "@/lib/supabase";
 
-export async function signIn(_: void, formData: FormData) {
+export async function signIn(
+  _: { error: string } | undefined,
+  formData: FormData,
+) {
   const supabase = await createClient();
 
-  // type-casting here for convenience
-  // in practice, you should validate your inputs
   const data = {
     email: formData.get("email") as string,
     password: formData.get("password") as string,
@@ -17,7 +18,9 @@ export async function signIn(_: void, formData: FormData) {
   const { error } = await supabase.auth.signInWithPassword(data);
 
   if (error) {
-    redirect("/error");
+    return {
+      error: "Email or password is incorrect. Please try again.",
+    };
   }
 
   redirect("/forms");

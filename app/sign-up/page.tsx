@@ -18,7 +18,7 @@ import {
 import { Input } from "@/components/ui/input";
 
 export default function SignUpPage() {
-  const [, formAction, pending] = useActionState(signUp, undefined);
+  const [result, formAction, pending] = useActionState(signUp, undefined);
   const [showPassword, setShowPassword] = useState(false);
 
   return (
@@ -34,6 +34,10 @@ export default function SignUpPage() {
 
         <CardContent>
           <form action={formAction} className="space-y-6">
+            {result?.error && (
+              <p className="text-red-600 text-sm mb-4">{result.error}</p>
+            )}
+
             <div className="space-y-2">
               <label htmlFor="email" className="block text-sm font-medium">
                 Email

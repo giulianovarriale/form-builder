@@ -8,7 +8,10 @@ type FormResponse = {
   fields: Array<{ id: string; value: string }>;
 };
 
-export async function submitForm({ formId, fields }: FormResponse) {
+export async function submitForm(
+  _: { error: string } | undefined,
+  { formId, fields }: FormResponse,
+) {
   const form = await prisma.form.findUnique({
     where: {
       id: formId,
@@ -16,7 +19,9 @@ export async function submitForm({ formId, fields }: FormResponse) {
   });
 
   if (!form) {
-    return;
+    return {
+      error: "Something went wrong. Please try again.",
+    };
   }
 
   const data = (form.fields as Field[]).map((field) => {
@@ -63,10 +68,18 @@ export async function submitForm({ formId, fields }: FormResponse) {
     };
   });
 
-  await prisma.formResponse.create({
-    data: {
-      formId,
-      response: data,
-    },
-  });
+  try {
+    await prisma.formResponse.create({
+      data: {
+        formId,
+        response: data,
+      },
+    });
+  } catch (error) {
+    console.error("Error submitting form response:", error);
+
+    return {
+      error: "Something went wrong. Please try again.",
+    };
+  }
 }

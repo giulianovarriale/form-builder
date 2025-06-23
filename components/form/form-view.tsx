@@ -2,7 +2,7 @@
 
 import type React from "react";
 
-import { FormEvent, useState, useTransition } from "react";
+import { FormEvent, useActionState, useState, useTransition } from "react";
 
 import { Loader2Icon, Send } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -28,7 +28,10 @@ type Props = {
 };
 
 export default function FormView({ id, title, description, fields }: Props) {
-  const [pending, startTransition] = useTransition();
+  const [, startTransition] = useTransition();
+
+  const [result, formAction, pending] = useActionState(submitForm, undefined);
+
   const [errors, setErrors] = useState<{ [key: string]: string }>({});
   const [isSubmitted, setIsSubmitted] = useState(false);
 
@@ -56,7 +59,7 @@ export default function FormView({ id, title, description, fields }: Props) {
     }
 
     startTransition(async () => {
-      await submitForm({
+      formAction({
         formId: id,
         fields: fields.map((field) => {
           const value = formData.getAll(field.id);
@@ -73,28 +76,10 @@ export default function FormView({ id, title, description, fields }: Props) {
     });
   }
 
-  if (isSubmitted) {
-    return (
-      <div className="px-4 py-12 flex flex-col items-center">
-        <div className="bg-green-100 rounded-full p-4 mb-6">
-          <Send className="h-8 w-8 text-green-600" />
-        </div>
-
-        <h2 className="text-2xl font-bold mb-2">
-          Form Submitted Successfully!
-        </h2>
-
-        <p className="text-gray-600">
-          Thank you for your submission. We have received your response.
-        </p>
-      </div>
-    );
-  }
-
   function renderField(field: Field) {
     if (field.type === "checkbox") {
       return (
-        <fieldset>
+        <fieldset className="space-y-2">
           <legend className="block font-medium">
             {field.label}
             {field.isRequired && <span className="text-red-500 ml-1">*</span>}
@@ -109,6 +94,10 @@ export default function FormView({ id, title, description, fields }: Props) {
               </div>
             ))}
           </div>
+
+          {errors[field.id] && (
+            <p className="text-red-500 text-md">{errors[field.id]}</p>
+          )}
         </fieldset>
       );
     }
@@ -155,6 +144,24 @@ export default function FormView({ id, title, description, fields }: Props) {
     );
   }
 
+  if (!result?.error && isSubmitted) {
+    return (
+      <div className="px-4 py-12 flex flex-col items-center">
+        <div className="bg-green-100 rounded-full p-4 mb-6">
+          <Send className="h-8 w-8 text-green-600" />
+        </div>
+
+        <h2 className="text-2xl font-bold mb-2">
+          Form Submitted Successfully!
+        </h2>
+
+        <p className="text-gray-600">
+          Thank you for your submission. We have received your response.
+        </p>
+      </div>
+    );
+  }
+
   return (
     <div className="w-full max-w-2xl mx-auto">
       <Card>
@@ -167,6 +174,10 @@ export default function FormView({ id, title, description, fields }: Props) {
           className="space-y-6 px-6 rounded-md bg-white"
           onSubmit={onSubmit}
         >
+          {result?.error && (
+            <p className="text-red-500 text-sm">{result.error}</p>
+          )}
+
           {fields.map((field) => (
             <div key={field.id} className="space-y-2">
               {renderField(field)}

@@ -12,7 +12,7 @@ import {
   Trash2,
   Type,
 } from "lucide-react";
-import { useRef, useState, useTransition } from "react";
+import { useActionState, useRef, useState, useTransition } from "react";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { Field, FormStructure } from "@/types";
@@ -23,7 +23,10 @@ type Props = {
   description: string;
   action: {
     label: string;
-    handler: (form: FormStructure) => Promise<void>;
+    handler: (
+      state: { error: string } | undefined,
+      form: FormStructure,
+    ) => Promise<{ error: string } | undefined>;
   };
 
   initialValue?: FormStructure;
@@ -37,8 +40,6 @@ export default function FormBuilder({
 }: Props) {
   const idRef = useRef(initialValue?.fields?.length ?? 0);
 
-  const [pending, startTransition] = useTransition();
-
   const [formTitle, setFormTitle] = useState(
     initialValue?.title ?? "Your form title here",
   );
@@ -48,6 +49,13 @@ export default function FormBuilder({
   );
 
   const [fields, setFields] = useState<Field[]>(initialValue?.fields ?? []);
+
+  const [result, formAction, pending] = useActionState(
+    action.handler,
+    undefined,
+  );
+
+  const [_, startTransition] = useTransition();
 
   const lastAddedFieldId = useRef<string>("");
 
@@ -337,7 +345,7 @@ export default function FormBuilder({
           disabled={pending}
           onClick={() =>
             startTransition(() =>
-              action.handler({
+              formAction({
                 id: initialValue?.id,
                 title: formTitle,
                 description: formDescription,
@@ -397,6 +405,12 @@ export default function FormBuilder({
         </aside>
 
         <main className="md:col-span-7 lg:col-span-9 flex flex-col gap-4">
+          {result?.error && (
+            <div className="p-6 rounded-md border bg-white ">
+              <p className="text-red-600">{result.error}</p>
+            </div>
+          )}
+
           <div className="p-6 rounded-md border bg-white flex flex-col gap-4">
             <input
               aria-label="Form title"

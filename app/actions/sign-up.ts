@@ -4,7 +4,10 @@ import { redirect } from "next/navigation";
 
 import { createClient } from "@/lib/supabase";
 
-export async function signUp(_: void, formData: FormData) {
+export async function signUp(
+  _: { error: string } | undefined,
+  formData: FormData,
+) {
   const supabase = await createClient();
 
   // type-casting here for convenience
@@ -16,13 +19,17 @@ export async function signUp(_: void, formData: FormData) {
   };
 
   if (data.password !== data.passwordConfirmation) {
-    redirect("/error");
+    return {
+      error: "Passwords do not match. Please try again.",
+    };
   }
 
   const result = await supabase.auth.signUp(data);
 
   if (result.error) {
-    redirect("/error");
+    return {
+      error: "An error occurred. Please try again.",
+    };
   }
 
   redirect("/forms");
