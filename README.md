@@ -12,7 +12,7 @@ https://github.com/user-attachments/assets/edaa0e9d-1797-4713-a0d7-b7130a09e7c4
 - [x] Accessibility: make sure keyboard users can use the app
 - [x] Accessibility: make sure screen reader users can use the app
 - [x] Responsiveness: make sure user can use the app on mobile
-- [ ] Error handling: display feedback to the user when something goes wrong
+- [x] Error handling: display feedback to the user when something goes wrong
 - [ ] Accessiblity: evaluate color contrast
 - [ ] AI (of course): allow the users to build forms using an internal AI agent
 
